@@ -1,0 +1,934 @@
+body {
+    font-family: sans-serif;
+    position: relative;
+    overflow: auto;
+    margin-top: 120px;
+    background: url("../res/wood.jpg") repeat 0 0;
+    background-attachment: fixed;
+}
+
+div.content {
+    height: 100%;
+}
+
+nav {
+    width: 95%;
+}
+
+.menuBtn {
+    display: none;
+}
+
+nav {
+    width: 95%;
+}
+
+header {
+    background-color: white;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 0 10px 0 black;
+}
+
+header ul {
+    list-style: none;
+}
+
+header li:hover {
+    cursor: pointer;
+}
+
+header ul li a {
+    float: left;
+    display: block;
+    color: black; 
+    text-align: center;
+    padding: 1% 2%;
+    text-decoration: none;
+    font-size: 1.1em;
+}
+
+header ul li a:hover {
+    background-color: #ddd;
+}
+
+header ul li a.first {
+    color: transparent;
+    font-size: 0;
+}
+
+header ul li a.first {
+    color: transparent;
+    font-size: 0;
+}
+  
+header ul li .icon {
+    display: none;
+}
+
+header ul li .home {
+    margin-top: -10px;
+    height: 60px;
+    width: 60px;
+}
+
+@media screen and (min-width: 812px) {
+    .sign-in-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 0.7em;
+        text-decoration: none;
+        text-transform: uppercase;
+        border-radius: 15%;
+    }
+
+    .float-right {
+        float:right;
+    }
+
+    header ul li a {
+        margin: auto 2%;
+    }
+
+    header ul li a.first {
+        margin-left: -2%;
+    }
+
+    header ul li a.sign-in-button {
+        margin: auto;
+    }
+}
+
+
+.sign-in-button:hover {
+    background-color: gray;
+    color: black;
+}
+
+.sign-in-button:active {
+    background-color: black;
+}
+
+.float-right {
+    float:right;
+}
+
+main {
+    margin-top: 1%;
+    margin-bottom: 2%;
+}
+
+main.index {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+main.index article {
+    margin: 4% 7%;
+    border-color: black;
+    border: 1px solid;
+    background: rgba(255,255,255,0.8);
+    padding-bottom: 1%;
+}
+
+main.login {
+    display: block;
+}
+
+main.add-transaction {
+    width: 70%;
+    margin-left: 5%;
+}
+
+main.transactions {
+    background: rgba(255,255,255,0.8);
+    width: 70%;
+    margin-left: 3%;
+    padding: 1%;
+    padding-bottom: 2%;
+}
+
+.container-transaction {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 2%;
+}
+
+.wrap-transaction {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-grow: 1;
+  padding: 5%;
+}
+
+.wrap-input {
+    width: 100%;
+    position: relative;
+    border-bottom: 2px solid #d9d9d9;
+    padding-bottom: 1%;
+    margin-bottom: 2.5%;
+    text-align: left;
+}
+
+.label-input {
+    font-size: 0.9em;
+    color: #666666;
+    line-height: 1.5;
+    padding-left: 0.5%;
+}
+
+.input-form {
+    display: block;
+    width: 100%;
+    background: transparent;
+    font-size: 1.1em;
+    color: #333333;
+    line-height: 1.2;
+    padding: 0 0.5%;
+    border:0;
+}
+
+.search-transaction {
+    display: block;
+    width: 100%;
+    font-size: 1.1em;
+    background: rgba(255,255,255,0.8);
+    color: #333333;
+    line-height: 1.2;
+    padding: 0 0.5%;
+    border:0;
+}
+
+.select-transaction {
+    border: 0;
+    width: 100%;
+    font-size: 1.1em;
+    line-height: 1.2;
+    padding: 0 0.5%;
+    margin-top: 2%;
+}
+
+.select-tag, .select-type {
+    border: 0;
+    width: 35%;
+    font-size: 1.1em;
+    line-height: 1.2;
+    padding: 0 0.5%;
+}
+
+.select-tag-transactions {
+    margin-top: 2%;
+}
+
+.select-tag-plans, .select-type-plans {
+    width: 45%;
+}
+
+select::-ms-expand { 
+    display: none; 
+}
+
+ul.statistics-list, ul.goals-list, ul.statistics-point-list, ul.goals-points-list * {
+    list-style: none;
+}
+
+.date-input {
+    border: 0;
+    width: 100%;
+    font-size: 1.1em;
+    line-height: 1.2;
+    padding: 0 0.5%;
+}
+
+.period-input {
+    width: 20%;
+    margin-right: 2%;
+}
+
+.focus-input {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.focus-input::before {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+  
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+  
+    background: #7f7f7f;
+}
+
+input.input-form {
+    margin-top: 1%;
+}
+
+.btn-tertiary {
+    color: #555;
+    padding: 0;
+    line-height: 40px;
+    width: 70%;
+    margin: auto;
+    display: block;
+    border: 2px solid #555;
+}
+
+.btn-tertiary:hover, .btn-tertiary:focus {
+    color: #888;
+    border-color: #888;
+}
+
+.input-file {
+    width: .1px;
+    height: .1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.input-file + .js-labelFile {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 1%;
+    cursor: pointer;
+}
+
+.input-file + .js-labelFile .icon::before {
+    content: "\f093";
+}
+
+.input-file + .js-labelFile.has-file .icon::before {
+    content: "\f00c";
+    color: #5AAC7B;
+}
+
+.transaction-submit {
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    background-color: #4CAF50;
+    width: 30%;
+    border: 0;
+    padding: 2%;
+    color: white;
+    text-decoration: none;
+    font-size: 0.8em;
+    transition: all 0.3 ease;
+    -webkit-transititon: all 0.3 ease;
+    cursor: pointer;
+    margin: auto 2%;
+}
+
+.buttons {
+    text-align: center;
+}
+
+.transaction-submit + .cancel {
+    background-color: red;
+}
+
+/* TESTTESTTEST */
+
+.transactions-first-row > * {
+    display: inline;
+}
+
+.transactions-second-row {
+    display: flex;
+}
+
+.transactions-second-row > .select-tag-transactions {
+    margin-right: 1%;
+}
+
+.transactions-second-row > .dates-period {
+    flex: 50%;
+    margin: 2% 5% auto 0;
+    display: flex;
+}
+
+.dates-period > .date-transaction {
+    flex: 50%;
+    display: flex;
+}
+
+.date-transaction > .period-label {
+    flex: none;
+    margin-right: 5%;
+}
+
+.date-transaction > .period-input {
+    flex: 2;
+}
+
+.transactions-second-row > .select-tag-transactions {
+    flex: 50%;
+}
+
+/* .transactions-second-row > .date-transaction:last-child {
+    flex: 50%;
+    margin: auto 0 auto 5%;
+} */
+ 
+/* .transactions-first-row > *, .transactions-second-row > * {
+    display: inline;
+} */
+
+.date-transaction {
+    display: inline;
+}
+
+.plans {
+    display: flex;
+    margin-top: 2%;
+}
+
+.plans > .select-tag-plans {
+    flex: 50%;
+}
+
+.plans > .select-tag-plans:first-child {
+    margin-left: 0;
+}
+
+.plans > .select-tag-plans:last-child {
+    margin-left: 5%;
+    margin-right: 1%;
+}
+
+.search {
+    width: 50%;
+}
+
+ul.transactions-links {
+    margin: 0; /* Обнуляем значение отступов */
+    padding: 4px; /* Значение полей */
+   }
+   ul.transactions-links li {
+    display: inline; /* Отображать как строчный элемент */
+    /* margin-right: 5%; Отступ слева */
+    padding: 3px; /* Поля вокруг текста */
+   }
+
+   ul.transactions-links li:first-child {
+       margin-left: 2%;
+   }
+
+article.statistics-article {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+article.table-article {
+    display: block;
+    background: rgba(255,255,255,0.8);
+    width: 70%;
+    margin: 2% 4% 3%;
+    padding-bottom: 2%;
+    padding-top: 5px;
+}
+
+section.statistics-section {
+    background: rgba(255,255,255,0.8);
+    margin: auto 0 3% 12%;
+}
+
+aside {
+    float: right;
+    margin: 5% 2% auto 5%;
+    width: 20%;
+    position: sticky;
+    overflow: auto;
+    top: 13%;
+    background-color: white;
+    box-shadow: 0 0 25px 0 black;
+}
+
+aside.index {
+    margin-left: 1%;
+}
+
+h1 {
+    text-align: center;
+}
+
+h1.statistics-text {
+    color: whitesmoke;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 5%;
+}
+
+.in-header {
+    margin-left: 6%;
+    cursor: pointer;
+}
+
+.in-header img {
+    height: 20px;
+    width: 20px;
+}
+
+div#balance_chart, div#trend_chart {
+    margin: 0 auto 5% auto;
+    width:90%;
+    min-width: 70%;
+}
+
+div#income_graph, div#expense_graph {
+    width:90%;
+    margin: 0 auto 5% auto;
+}
+
+form.chart-form {
+    text-align: center;
+}
+
+table {
+    margin:auto;
+    margin-bottom: 7%;
+    border-collapse: collapse;
+    width: 95%;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 2%;
+  }
+
+  td.spanned {
+    text-align: center;
+  }
+  
+  tr:nth-child(even){background-color: white}
+  tr:nth-child(odd){background-color: gainsboro}
+  
+  th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.login-page {
+    max-width: 70%;
+    padding: 8% 0 0;
+    margin: -5% auto 5%;
+}
+
+.form-login {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 10% 5%;
+    text-align: center;
+}
+
+.form-login input {
+    font-family: "Roboto", sans-serif;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 2%;
+    padding: 2%;
+    box-sizing: border-box;
+    font-size: 0.8em;
+}
+
+.form-login button {
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    background-color: #4CAF50;
+    width: 100%;
+    border: 0;
+    padding: 3%;
+    color: white;
+    margin-top: 1%;
+    font-size: 1em;
+    transition: all 0.3 ease;
+    -webkit-transititon: all 0.3 ease;
+    cursor: pointer;
+}
+
+.form-login button:hover,.form button:active,.form button:focus {
+    background: #43A047;
+}
+
+.form-login .message {
+    margin: 3% 0 0;
+    color: #B3B3B3;
+    font-size: 0.8em;
+}
+
+.form-login .message a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.form-login .register-form {
+    display: none;
+}
+
+table.budget {
+    width: 90%;
+}
+table.budget th {
+    background-color: white;
+    color: black;
+}
+
+table.budget tr:nth-child(even){background-color: white}
+table.budget tr:nth-child(odd){background-color: white}
+table.budget  td.spanned {
+    background-color: #B3B3B3;
+}
+
+details {
+    margin-bottom: 3%;
+}
+
+details > * {
+    margin-left: 3%;
+}
+
+.table-transactions, .table-plans {
+    margin-left: 3%;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    text-align: center;
+    z-index: 1; /* Sit on top */
+    padding-top: 15%; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+
+  .modal#addToGoalsModal {
+      display: none;
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    margin-top: 10%;
+    padding: 3%;
+    padding-bottom: 10%;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.modal-submit-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.close-modal, .close-modal-add {
+    color: #aaaaaa;
+    float: right;
+    font-size: 2em;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal, .close-modal-add :hover, :focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.edit-link {
+    margin-left: 4%;
+    font-size: 0.5em;
+    color: blue;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
+.modal-ul {
+    list-style: none;
+}
+
+/* footer {
+    bottom: 0;
+    margin-top: 150px;
+    width: 100%;
+    height: 80px;
+    box-shadow: 0 0 25px 0 black; 
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: white;
+}
+
+footer * {
+    text-align: center;
+    display: inline;
+} */
+
+
+@media screen and (max-width: 900px) {
+    table {
+        table-layout: fixed;
+        min-width: 200px;
+    }
+
+    input {
+        background-color: rgba(255,255,255,0.8);;
+    }
+
+
+    td, th {
+        word-wrap:break-word;
+    }
+
+    h1.statistics-text {
+        margin-top: -5%;
+    }
+
+    header {
+        padding-bottom: 1%;
+    }
+
+    nav {
+        padding-bottom: 1%;
+    }
+
+    header ul {
+        margin-right: 7%;
+    }
+
+    header ul li a:not(.first) {
+        display: none;
+    }
+
+    header ul li a.icon {
+        float: right;
+        display: block;
+    }
+
+    aside {
+        display: none;
+    }
+
+    .nav-wrapper.responsive ul li .icon {
+        float: right;
+    }
+
+    .nav-wrapper.responsive ul li a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+
+    .nav-wrapper.responsive ul li a.first {
+        color: black;
+        font-size: 1.1em;
+    }
+
+    .transactions-first-row {
+        margin-bottom: 2%;
+    }
+
+    .transactions-second-row {
+        display: grid;
+        grid-template-rows: 1fr;
+        margin-right: 5%;
+    }
+
+    .transactions-second-row > .dates-period {
+        display: grid;
+        grid-template-rows: 1fr;
+        margin-right: 5%;
+    }
+
+    .dates-period > * {
+        margin-top: 1%;
+    }
+
+    .date-transaction > .period-input {
+        background-color: rgba(255,255,255,0.8);;
+    }
+
+    .dates-period > .date-transaction {
+        display: block;
+    }
+
+    .date-transaction > .period-input {
+        flex: none;
+        width: 100%;
+        margin-left: 2%;
+    }
+
+    .period-input {
+        width: 30%;
+    }
+
+    .wrap-transaction {
+        margin-left: 10%;
+    }
+
+    .nav-wrapper.responsive ul li a.sign-in-button {
+        background-color: #4CAF50;
+    }
+
+    .nav-wrapper.responsive ul li .home {
+        display: none;
+    }
+
+    main {
+        grid-template-columns: 1fr;
+        justify-content: center;
+        margin-bottom: 8%;
+    }
+
+    .form-login {
+        width: 100%;
+    }
+
+    .float-right {
+        float: none;
+    }
+
+    .sign-in-button {
+        background-color: #4CAF50;
+        color: white;
+        width: 100%;
+        text-align: left;
+        margin: auto;
+        padding: auto;
+    }
+
+    main.index {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    main.add-transaction {
+        width: 90%;
+        margin: -5% 5% auto 1%;
+    }
+
+    input.date-input  {
+        min-width: 35%;
+    }
+
+    .select-tag {
+        width: 100%;
+        background-color: rgba(255,255,255,0.8);
+    }
+
+    .select-type, .select-type-plans {
+        background-color: rgba(255,255,255,0.8);
+    }
+
+    .plans {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-top: 2%;
+    }
+
+    .plans * {
+        width: 100%;
+        background-color: white;
+    }
+
+    article.statistics-article {
+        grid-template-columns: 1fr;
+    }
+
+    article.table-article {
+        margin: auto 5% 5% 5%;
+        width: 90%;
+    }
+
+    section.statistics-section {
+        margin: auto 5% 5% 5%;
+    }
+
+
+    main.transactions {
+        width: 90%;
+        margin: 5% auto;
+        padding: 2%;
+    }
+
+    td .in-header {
+        margin-left: auto;
+    }
+
+    .search-transaction {
+        width: 40%;
+    }
+
+    .transactions-links * {
+        margin: auto;
+    }
+
+    .buttons {
+        display: grid;
+    }
+
+    .transaction-submit {
+        width: auto;
+        margin-top: 2%;
+        margin-bottom: 2%;
+    }
+
+    div.main-item {
+        margin-left: 3%;
+    }
+
+    .goals-frame {
+        padding-bottom: 17%;
+    }
+    
+    .goals > li{
+        float: left;
+        margin: 3%;
+        margin-top: auto;
+        border:1px solid #000;
+        list-style:none;
+        padding:2px;
+        width:40%;
+    }
+
+    select {
+        background:none\9;
+        padding: 5px\9;
+    } 
+}

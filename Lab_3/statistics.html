@@ -1,0 +1,151 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+
+    <title>Expense manager</title>
+    <link rel="icon" href="res/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="res/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="scripts/charts.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="scripts/navigation.js"></script>
+</head>
+
+<body>
+
+    <header class="nav-wrapper" id="myTopnav">
+        <nav>
+            <ul>
+                 <li><a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                        <i class="fa fa-bars"></i>
+                    </a></li>
+                <li><a href="index.html" class="first"><img class="home" src="res/home.png" />
+                        Home</a></li>
+                <li><a href="transactions.html">Transactions</a></li>
+                <li><a href="plans.html">Plans</a></li>
+                <li><a href="goals.html">Goals</a></li>
+                <li><a href="statistics.html">Full statistics</a></li>
+                <div class="float-right">
+                    <li class='nav-button'><a class="sign-in-button" href="login.html">Sign in/up</a></li>
+                </div>
+            </ul>
+        </nav>
+    </header>
+
+    <aside>
+        <h2>Short statistics</h2>
+        <ul class="statistics-list">
+            <li>
+                <h3>Balance</h3>
+                <ul class="statistics-point-list">
+                    <li>
+                        <p>Card: "value"</p>
+                    </li>
+                    <li>
+                        <p>Cash: "value"</p>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h3>Income</h3>
+                <ul class="statistics-point-list">
+                    <li>
+                        <p>Card: "value"</p>
+                    </li>
+                    <li>
+                        <p>Cash: "value"</p>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h3>Expense</h3>
+                <ul class="statistics-point-list">
+                    <li>
+                        <p>Card: "value"</p>
+                    </li>
+                    <li>
+                        <p>Cash: "value"</p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="statistics">
+        <h1 class="statistics-text">Full statistics</h1>
+        <article class="statistics-article">
+            <section class="statistics-section">
+                <h2>Income</h2>
+                <div id="income_graph"></div>
+            </section>
+            <section class="statistics-section">
+                <h2>Expense</h2>
+                <div id="expense_graph"></div>
+            </section>
+        </article>
+        <article class="table-article">
+            <h2 class="table-title">Budget</h2>
+            <table class="budget">
+                <tr>
+                    <th></th>
+                    <th>date_1</th>
+                    <th>date_2</th>
+                    <th>date_3</th>
+                    <th>date_4</th>
+                    <th>date_5</th>
+                </tr>
+                <tr>
+                    <td class="spanned" colspan="6">Income</td>
+                </tr>
+                <tr>
+                    <td><b>income_1</b></td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                </tr>
+                <tr>
+                    <td><b>income_2</b></td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                </tr>
+                <tr>
+                    <td class="spanned" colspan="6">Expense</td>
+                </tr>
+                <tr>
+                    <td><b>expense_1</b></td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                </tr>
+                <tr>
+                    <td><b>expense_2</b></td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                </tr>
+                <tr>
+                    <td><b>expense_3</b></td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                    <td>amount</td>
+                </tr>
+                </td>
+            </table>
+        </article>
+    </main>
+</body>

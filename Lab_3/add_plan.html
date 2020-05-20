@@ -1,0 +1,166 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title>Expense manager</title>
+    <link rel="icon" href="res/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="res/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="scripts/navigation.js"></script>
+</head>
+
+<body>
+    <header class="nav-wrapper" id="myTopnav">
+        <nav>
+            <ul>
+                 <li><a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                        <i class="fa fa-bars"></i>
+                    </a></li>
+                <li><a href="index.html" class="first"><img class="home" src="res/home.png"/>
+                        Home</a></li>
+                <li><a href="transactions.html">Transactions</a></li>
+                <li><a href="plans.html">Plans</a></li>
+                <li><a href="goals.html">Goals</a></li>
+                <li><a href="statistics.html">Full statistics</a></li>
+                <div class="float-right">
+                    <li class='nav-button'><a class="sign-in-button" href="login.html">Sign in/up</a></li>
+                </div>
+            </ul>
+        </nav>
+    </header>
+
+    <aside>
+        <h2>Short statistics</h2>
+        <ul class="statistics-list">
+            <li>
+                <h3>Balance</h3>
+                <ul class="statistics-point-list">
+                    <li>
+                        <p>Card: "value"</p>
+                    </li>
+                    <li>
+                        <p>Cash: "value"</p>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h3>Income</h3>
+                <ul class="statistics-point-list">
+                    <li>
+                        <p>Card: "value"</p>
+                    </li>
+                    <li>
+                        <p>Cash: "value"</p>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h3>Expense</h3>
+                <ul class="statistics-point-list">
+                    <li>
+                        <p>Card: "value"</p>
+                    </li>
+                    <li>
+                        <p>Cash: "value"</p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="add-transaction">
+        <div class="container-transaction">
+            <div class="wrap-transaction">
+                <form class='transaction-form'>
+                    <div class="wrap-input validate-input" data-validate="Description is required">
+                        <span class="label-input">Description</span>
+                        <input class="input input-form" type="text" name="description" placeholder="Enter description">
+                        <span class="focus-input"></span>
+                    </div>
+                    <div class="wrap-input validate-input" data-validate="Amount is required">
+                        <span class="label-input">Amount</span>
+                        <input class="input input-form" type="number" name="amount" placeholder="Enter amount">
+                        <span class="focus-input"></span>
+                    </div>
+                    <div class="wrap-input input-select">
+                        <span class="label-input">Type</span>
+                        <div>
+                            <select class="select-transaction" name="type">
+                                <option>Income</option>
+                                <option>Expense</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="wrap-input input-select">
+                        <span class="label-input">Currency</span>
+                        <div>
+                            <select class="select-transaction" name="currency">
+                                <option>USD</option>
+                                <option>EUR</option>
+                                <option>BYN</option>
+                                <option>RUB</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="wrap-input input-select">
+                        <span class="label-input">Category</span>
+                        <div>
+                            <select class="select-transaction" name="category">
+                                <option>Food</option>
+                                <option>Transport</option>
+                                <option>Car</option>
+                                <option>Entertainment</option>
+                                <option>Clothes</option>
+                                <option>House</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="wrap-input input-date">
+                        <span class="label-input">Date</span>
+                        <input class="input date-input" type="date" name="date">
+                    </div>
+                    <div class="wrap-input input-select">
+                        <span class="label-input">Repeat</span>
+                        <div>
+                            <select class="select-transaction" name="repeat">
+                                <option>No repeat</option>
+                                <option>Every day</option>
+                                <option>Every month</option>
+                                <option>Every year</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="wrap-input input-select">
+                        <span class="label-input">Account</span>
+                        <div>
+                            <select class="select-transaction" name="account">
+                                <option>Card</option>
+                                <option>Cash</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="wrap-input">
+                        <span class="label-input">Place</span>
+                        <input class="input input-form" type="text" name="place" placeholder="Enter place">
+                        <span class="focus-input"></span>
+                    </div>
+                    <div class="wrap-input">
+                        <span class="label-input">Image</span>
+                        <input class="input-file" type="file" name="image" class="input-file" placeholder="Upload image">
+                        <label for="image" class="btn btn-tertiary js-labelFile">
+                            <i class="icon fa fa-check"></i>
+                            <span class="js-fileName">Загрузить файл</span>
+                        </label>
+                    </div>
+                    <div class="buttons">
+                        <input type="submit" name="Submit" class="transaction-submit">
+                        <a class="transaction-submit cancel" href="transactions.html">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>

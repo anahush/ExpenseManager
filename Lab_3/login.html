@@ -1,0 +1,58 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Expense manager</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <link rel="icon" href="res/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="res/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="scripts/navigation.js"></script>
+    <script type="text/javascript" src="scripts/login.js"></script>
+</head>
+
+<body>
+    <header class="nav-wrapper" id="myTopnav">
+        <nav>
+            <ul>
+                 <li><a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                        <i class="fa fa-bars"></i>
+                    </a></li>
+                <li><a href="index.html" class="first"><img class="home" src="res/home.png"/>
+                        Home</a></li>
+                <li><a href="transactions.html">Transactions</a></li>
+                <li><a href="plans.html">Plans</a></li>
+                <li><a href="goals.html">Goals</a></li>
+                <li><a href="statistics.html">Full statistics</a></li>
+                <div class="float-right">
+                    <li class='nav-button'><a class="sign-in-button" href="login.html">Sign in/up</a></li>
+                </div>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="login">
+        <div class="login-page">
+            <div class="form-login">
+                <form class="register-form" id="register-form">
+                    <input type="text" placeholder="name" />
+                    <input type="password" placeholder="password" />
+                    <input type="text" placeholder="email address" />
+                    <button>create</button>
+                    <p class="message">Already registered? <a onclick="toSignIn()"href="#">Sign In</a></p>
+                </form>
+                <form class="login-form" id="login-form">
+                    <input type="text" placeholder="username" />
+                    <input type="password" placeholder="password" />
+                    <button>login</button>
+                    <p class="message">Not registered? <a onclick="toSignUp()" href="#">Create an account</a></p>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
