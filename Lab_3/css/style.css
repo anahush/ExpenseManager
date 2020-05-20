@@ -78,7 +78,7 @@ header ul li .home {
     width: 60px;
 }
 
-@media screen and (min-width: 812px) {
+@media screen and (min-width: 900px) {
     .sign-in-button {
         background-color: #4CAF50;
         color: white;
@@ -350,8 +350,6 @@ input.input-form {
     background-color: red;
 }
 
-/* TESTTESTTEST */
-
 .transactions-first-row > * {
     display: inline;
 }
@@ -366,8 +364,13 @@ input.input-form {
 
 .transactions-second-row > .dates-period {
     flex: 50%;
-    margin: 2% 5% auto 0;
+    margin: 2% 5% auto -2%;
     display: flex;
+    width: 100%;
+}
+
+.transactions-second-row .period-label {
+    margin-left: 2%;
 }
 
 .dates-period > .date-transaction {
@@ -700,6 +703,14 @@ footer * {
     display: inline;
 } */
 
+.chart-container {
+    text-align: center;
+}
+
+.temp-chart {
+    width: 80%;
+    margin-bottom: 5%;
+}
 
 @media screen and (max-width: 900px) {
     table {
@@ -714,10 +725,6 @@ footer * {
 
     td, th {
         word-wrap:break-word;
-    }
-
-    h1.statistics-text {
-        margin-top: -5%;
     }
 
     header {
@@ -760,10 +767,6 @@ footer * {
         font-size: 1.1em;
     }
 
-    .transactions-first-row {
-        margin-bottom: 2%;
-    }
-
     .transactions-second-row {
         display: grid;
         grid-template-rows: 1fr;
@@ -802,10 +805,6 @@ footer * {
         margin-left: 10%;
     }
 
-    .nav-wrapper.responsive ul li a.sign-in-button {
-        background-color: #4CAF50;
-    }
-
     .nav-wrapper.responsive ul li .home {
         display: none;
     }
@@ -831,6 +830,7 @@ footer * {
         text-align: left;
         margin: auto;
         padding: auto;
+        border-radius: 0;
     }
 
     main.index {
