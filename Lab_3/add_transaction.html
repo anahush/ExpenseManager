@@ -8,23 +8,19 @@
     <link rel="icon" href="res/favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="res/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" src="scripts/navigation.js"></script>
 </head>
 
 <body>
     <header class="nav-wrapper" id="myTopnav">
         <nav>
-            <ul>
-                 <li><a href="javascript:void(0);" class="icon" onclick="myFunction()">
-                        <i class="fa fa-bars"></i>
-                    </a></li>
-                <li><a href="index.html" class="first"><img class="home" src="res/home.png"/>
-                        Home</a></li>
+            <ul class="nav-ul">
+                <li><button class="icon" onclick="myFunction()"><img src="res/ham_menu.png"></button></li>
+                <li><a href="index.html" class="first"><img class="home" src="res/home.png"/>Home</a></li>
                 <li><a href="transactions.html">Transactions</a></li>
                 <li><a href="plans.html">Plans</a></li>
                 <li><a href="goals.html">Goals</a></li>
-                <li><a href="statistics.html">Full statistics</a></li>
+                <li class="longer-text"><a class="l-t" href="statistics.html">Full statistics</a></li>
                 <div class="float-right">
                     <li class='nav-button'><a class="sign-in-button" href="login.html">Sign in/up</a></li>
                 </div>
@@ -32,7 +28,8 @@
         </nav>
     </header>
 
-    <aside>
+
+    <aside class="aside-add">
         <h2>Short statistics</h2>
         <ul class="statistics-list">
             <li>
@@ -76,28 +73,28 @@
             <div class="wrap-transaction">
                 <form class='transaction-form'>
                     <div class="wrap-input validate-input" data-validate="Description is required">
-                        <span class="label-input">Description</span>
-                        <input class="input input-form" type="text" name="description" placeholder="Enter description">
+                        <label class="label-input" for="description-transaction">Description</label>
+                        <input class="input input-form" type="text" id="description-transaction" name="description" placeholder="Enter description">
                         <span class="focus-input"></span>
                     </div>
                     <div class="wrap-input validate-input" data-validate="Amount is required">
-                        <span class="label-input">Amount</span>
-                        <input class="input input-form" type="number" name="amount" placeholder="Enter amount">
+                        <label class="label-input" for="amount-transaction">Amount</label>
+                        <input class="input input-form" id="amount-transaction" type="number" name="amount" placeholder="Enter amount">
                         <span class="focus-input"></span>
                     </div>
                     <div class="wrap-input input-select">
-                        <span class="label-input">Type</span>
+                        <label class="label-input" for="type-transaction">Type</label>
                         <div>
-                            <select class="select-transaction" name="type">
+                            <select class="select-transaction" id="type-transaction" name="type">
                                 <option>Income</option>
                                 <option>Expense</option>
                             </select>
                         </div>
                     </div>
                     <div class="wrap-input input-select">
-                        <span class="label-input">Currency</span>
+                        <label class="label-input" for="currency-transaction">Currency</label>
                         <div>
-                            <select class="select-transaction" name="currency">
+                            <select class="select-transaction" id="currency-transaction" name="currency">
                                 <option>USD</option>
                                 <option>EUR</option>
                                 <option>BYN</option>
@@ -106,9 +103,9 @@
                         </div>
                     </div>
                     <div class="wrap-input input-select">
-                        <span class="label-input">Category</span>
+                        <label class="label-input" for="category-transaction">Category</label>
                         <div>
-                            <select class="select-transaction" name="category">
+                            <select class="select-transaction" id="category-transaction" name="category">
                                 <option>Food</option>
                                 <option>Transport</option>
                                 <option>Car</option>
@@ -119,28 +116,28 @@
                         </div>
                     </div>
                     <div class="wrap-input input-date">
-                        <span class="label-input">Date</span>
-                        <input class="input date-input" type="date" name="date">
+                        <label class="label-input" for="date-transaction">Date</label>
+                        <input class="input date-input" id="date-transaction" type="date" name="date">
                     </div>
                     <div class="wrap-input input-select">
-                        <span class="label-input">Account</span>
+                        <label class="label-input" for="account-transaction">Account</label>
                         <div>
-                            <select class="select-transaction" name="account">
+                            <select class="select-transaction" id="account-transaction" name="account">
                                 <option>Card</option>
                                 <option>Cash</option>
                             </select>
                         </div>
                     </div>
                     <div class="wrap-input">
-                        <span class="label-input">Place</span>
-                        <input class="input input-form" type="text" name="place" placeholder="Enter place">
+                        <label class="label-input" for="place-transaction">Place</label>
+                        <input class="input input-form" id="place-transaction" type="text" name="place" placeholder="Enter place">
                         <span class="focus-input"></span>
                     </div>
                     <div class="wrap-input">
-                        <span class="label-input">Image</span>
-                        <input class="input-file" type="file" name="image" class="input-file" placeholder="Upload image">
+                        <label class="label-input" for="image-transaction">Image</label>
+                        <input class="input-file" id="image-transaction" type="file" name="image" class="input-file" placeholder="Upload image">
                         <label for="image" class="btn btn-tertiary js-labelFile">
-                            <i class="icon fa fa-check"></i>
+                            <img class="upload" src="res/upload.png">
                             <span class="js-fileName">Загрузить файл</span>
                         </label>
                     </div>

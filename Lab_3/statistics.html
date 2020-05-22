@@ -11,30 +11,26 @@
     <link rel="stylesheet" href="css/style.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="scripts/charts.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" src="scripts/navigation.js"></script>
 </head>
 
 <body>
-
     <header class="nav-wrapper" id="myTopnav">
         <nav>
-            <ul>
-                 <li><a href="javascript:void(0);" class="icon" onclick="myFunction()">
-                        <i class="fa fa-bars"></i>
-                    </a></li>
-                <li><a href="index.html" class="first"><img class="home" src="res/home.png" />
-                        Home</a></li>
+            <ul class="nav-ul">
+                <li><button class="icon" onclick="myFunction()"><img src="res/ham_menu.png"></button></li>
+                <li><a href="index.html" class="first"><img class="home" src="res/home.png" />Home</a></li>
                 <li><a href="transactions.html">Transactions</a></li>
                 <li><a href="plans.html">Plans</a></li>
                 <li><a href="goals.html">Goals</a></li>
-                <li><a href="statistics.html">Full statistics</a></li>
+                <li class="longer-text"><a class="l-t" href="statistics.html">Full statistics</a></li>
                 <div class="float-right">
                     <li class='nav-button'><a class="sign-in-button" href="login.html">Sign in/up</a></li>
                 </div>
             </ul>
         </nav>
     </header>
+
 
     <aside>
         <h2>Short statistics</h2>
@@ -92,59 +88,61 @@
         <article class="table-article">
             <h2 class="table-title">Budget</h2>
             <table class="budget">
-                <tr>
-                    <th></th>
-                    <th>date_1</th>
-                    <th>date_2</th>
-                    <th>date_3</th>
-                    <th>date_4</th>
-                    <th>date_5</th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th scope="col">date_1</th>
+                        <th scope="col">date_2</th>
+                        <th scope="col">date_3</th>
+                        <th scope="col">date_4</th>
+                        <th scope="col">date_5</th>
+                    </tr>
+                </thead>
                 <tr>
                     <td class="spanned" colspan="6">Income</td>
                 </tr>
                 <tr>
                     <td><b>income_1</b></td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
+                    <td data-th="date_1">amount</td>
+                    <td data-th="date_2">amount</td>
+                    <td data-th="date_3">amount</td>
+                    <td data-th="date_4">amount</td>
+                    <td data-th="date_5">amount</td>
                 </tr>
                 <tr>
                     <td><b>income_2</b></td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
+                    <td data-th="date_1">amount</td>
+                    <td data-th="date_2">amount</td>
+                    <td data-th="date_3">amount</td>
+                    <td data-th="date_4">amount</td>
+                    <td data-th="date_5">amount</td>
                 </tr>
                 <tr>
                     <td class="spanned" colspan="6">Expense</td>
                 </tr>
                 <tr>
                     <td><b>expense_1</b></td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
+                    <td data-th="date_1">amount</td>
+                    <td data-th="date_2">amount</td>
+                    <td data-th="date_3">amount</td>
+                    <td data-th="date_4">amount</td>
+                    <td data-th="date_5">amount</td>
                 </tr>
                 <tr>
                     <td><b>expense_2</b></td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
+                    <td data-th="date_1">amount</td>
+                    <td data-th="date_2">amount</td>
+                    <td data-th="date_3">amount</td>
+                    <td data-th="date_4">amount</td>
+                    <td data-th="date_5">amount</td>
                 </tr>
                 <tr>
                     <td><b>expense_3</b></td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
-                    <td>amount</td>
+                    <td data-th="date_1">amount</td>
+                    <td data-th="date_2">amount</td>
+                    <td data-th="date_3">amount</td>
+                    <td data-th="date_4">amount</td>
+                    <td data-th="date_5">amount</td>
                 </tr>
                 </td>
             </table>
