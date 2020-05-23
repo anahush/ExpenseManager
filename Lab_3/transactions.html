@@ -20,7 +20,7 @@
         <nav>
             <ul class="nav-ul">
                 <li><button class="icon" onclick="myFunction()"><img src="res/ham_menu.png"></button></li>
-                <li><a href="index.html" class="first"><img class="home" src="res/home.png" />Home</a></li>
+                <li class="home-link"><a href="index.html" class="first"><img class="home" src="res/home.png" />Home</a></li>
                 <li><a href="transactions.html">Transactions</a></li>
                 <li><a href="plans.html">Plans</a></li>
                 <li><a href="goals.html">Goals</a></li>
@@ -95,12 +95,12 @@
                 <div class="transactions-second-row">
                     <div class="dates-period">
                         <div class="date-transaction">
-                            <span class="period-label">From: </span>
-                            <input class="input date-input period-input" type="date" name="date_from">
+                            <label class="period-label" for="from-transactions">From: </label>
+                            <input class="input date-input period-input" id="from-transactions" type="date" name="date_from">
                         </div>
                         <div class="date-transaction">
-                            <span class="period-label">To: </span>
-                            <input class="input date-input period-input low" type="date" name="date_to">
+                            <label class="period-label" for="to-transactions">To: </label>
+                            <input class="input date-input period-input low" id="to-transactions" type="date" name="date_to">
                         </div>
                     </div>
                     <select class="select-tag select-tag-transactions">
@@ -138,32 +138,32 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td data-th="Date">date_1</td>
+                        <td data-th="Date"><time>date_1</time></td>
                         <td data-th="Description"><button class="text-like-button in-table open-modal">descr_1</button></td>
                         <td data-th="Amount">amount_1</td>
                     </tr>
                     <tr>
-                        <td data-th="Date">date_2</td>
+                        <td data-th="Date"><time>date_2</time></td>
                         <td data-th="Description"><button class="text-like-button in-table open-modal">descr_2</button></td>
                         <td data-th="Amount">amount_2</td>
                     </tr>
                     <tr>
-                        <td data-th="Date">date_3</td>
+                        <td data-th="Date"><time>date_3</time></td>
                         <td data-th="Description"><button class="text-like-button in-table open-modal">descr_3</button></td>
                         <td data-th="Amount">amount_3</td>
                     </tr>
                     <tr>
-                        <td data-th="Date">date_4</td>
+                        <td data-th="Date"><time>date_4</time></td>
                         <td data-th="Description"><button class="text-like-button in-table open-modal">descr_4</button></td>
                         <td data-th="Amount">amount_4</td>
                     </tr>
                     <tr>
-                        <td data-th="Date">date_5</td>
+                        <td data-th="Date"><time>date_5</time></td>
                         <td data-th="Description"><button class="text-like-button in-table open-modal">descr_5</button></td>
                         <td data-th="Amount">amount_5</td>
                     </tr>
                     <tr>
-                        <td data-th="Date">date_6</td>
+                        <td data-th="Date"><time>date_6</time></td>
                         <td data-th="Description"><button class="text-like-button open-modal">descr_6</button></td>
                         <td data-th="Amount">amount_6</td>
                     </tr>
