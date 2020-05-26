@@ -1,0 +1,222 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Expense manager</title>
+    <meta name="description" content="Expense manager">
+    <meta name="author" content="Anastasiya Puzikava">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <link rel="icon" href="res/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="res/favicon.ico" type="image/x-icon" />
+
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="scripts/navigation.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="scripts/charts.js"></script>
+
+</head>
+
+<body>
+    <header class="nav-wrapper" id="myTopnav">
+        <nav>
+            <ul class="nav-ul">
+                <li><button class="icon" onclick="myFunction()"><img src="res/ham_menu.png"></button></li>
+                <li class="home-link"><a href="#" class="first"><img class="home" src="res/home.png" />Home</a></li>
+                <li><a href="transactions.html">Transactions</a></li>
+                <li><a href="plans.html">Plans</a></li>
+                <li><a href="goals.html">Goals</a></li>
+                <li class="longer-text"><a class="l-t" href="statistics.html">Full statistics</a></li>
+                <div class="float-right">
+                    <li class='nav-button'><a class="sign-in-button" href="login.html">Sign in/up</a></li>
+                </div>
+            </ul>
+        </nav>
+    </header>
+
+
+    <aside class="index">
+        <div class="aside-content">
+            <h2>Short statistics</h2>
+            <ul class="statistics-list">
+                <li>
+                    <h3>Balance</h3>
+                    <ul class="statistics-point-list">
+                        <li>
+                            <p>Card: "value"</p>
+                        </li>
+                        <li>
+                            <p>Cash: "value"</p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <h3>Income</h3>
+                    <ul class="statistics-point-list">
+                        <li>
+                            <p>Card: "value"</p>
+                        </li>
+                        <li>
+                            <p>Cash: "value"</p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <h3>Expense</h3>
+                    <ul class="statistics-point-list">
+                        <li>
+                            <p>Card: "value"</p>
+                        </li>
+                        <li>
+                            <p>Cash: "value"</p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="index">
+        <div class="main-item">
+            <article class="chart-container">
+                <h2>Balance</h2>
+                <img class="temp-chart" src="res/chart_1.png">
+                <!-- <div id="balance_chart"></div> -->
+                <form class="chart-form">
+                    <label>
+                        <input type="radio" name="choice">Month
+                    </label>
+                    <label>
+                        <input type="radio" name="choice">Year
+                    </label>
+                    <label>
+                        <input type="radio" name="choice">All time
+                    </label>
+                </form>
+            </article>
+        </div>
+
+        <div class="main-item">
+            <article class="chart-container">
+                <h2>Trend</h2>
+                <img class="temp-chart" src="res/chart_2.png">
+                <!-- <div id="trend_chart"></div> -->
+                <form class="chart-form">
+                    <label>
+                        <input type="radio" name="choice">Month
+                    </label>
+                    <label>
+                        <input type="radio" name="choice">Year
+                    </label>
+                    <label>
+                        <input type="radio" name="choice">All time
+                    </label>
+                </form>
+            </article>
+        </div>
+
+        <div class="main-item">
+            <article>
+                <h2>Goals<a class="in-header" href="add_goal.html"><img src="res/add.png" height="20" width="20" /></a>
+                </h2>
+                <div class="goals-frame">
+                    <ul class="goals-list">
+                        <li>
+                            <h3>Goal_1</h3>
+                            <ul class="goals-points-list">
+                                <li>
+                                    <p>Contributed: "value"</p>
+                                </li>
+                                <li>
+                                    <p>Left: "value"</p>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h3>Goal_2</h3>
+                            <ul class="goals-points-list">
+                                <li>
+                                    <p>Contributed: "value"</p>
+                                </li>
+                                <li>
+                                    <p>Left: "value"</p>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h3>Goal_1</h3>
+                            <ul class="goals-points-list">
+                                <li>
+                                    <p>Contributed: "value"</p>
+                                </li>
+                                <li>
+                                    <p>Left: "value"</p>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+        </div>
+
+        <div class="main-item">
+            <article>
+                <h2>Reminders<a class="in-header" href="add_plan.html"><img src="res/add.png" height="20"
+                            width="20" /></a></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Due</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-th="Due"><time>date_1</time></td>
+                            <td data-th="Description">descr_1</td>
+                            <td data-th="Amount">amount_1</td>
+                        </tr>
+                        <tr>
+                            <td data-th="Due"><time>date_2</time></td>
+                            <td data-th="Description">descr_2</td>
+                            <td data-th="Amount">amount_2</td>
+                        </tr>
+                        <tr>
+                            <td data-th="Due"><time>date_3</time></td>
+                            <td data-th="Description">descr_3</td>
+                            <td data-th="Amount">amount_3</td>
+                        </tr>
+                        <tr>
+                            <td data-th="Due"><time>date_4</time></td>
+                            <td data-th="Description">descr_4</td>
+                            <td data-th="Amount">amount_4</td>
+                        </tr>
+                        <tr>
+                            <td data-th="Due"><time>date_5</time></td>
+                            <td data-th="Description">descr_5</td>
+                            <td data-th="Amount">amount_5</td>
+                        </tr>
+                        <tr>
+                            <td data-th="Due"><time>date_6</time></td>
+                            <td data-th="Description">descr_6</td>
+                            <td data-th="Amount">amount_6</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+        </div>
+    </main>
+
+    <!-- <footer>
+        <div class="footer-item">
+            <h3>Contacts</h3>
+        </div>
+        <div class="footer-item">
+            <h3>Info</h3>
+        </div>
+    </footer> -->
+</body>
+
+</html>
