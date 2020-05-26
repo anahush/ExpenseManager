@@ -1,0 +1,63 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Expense manager</title>
+    <meta name="description" content="Expense manager">
+    <meta name="author" content="Anastasiya Puzikava">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <link rel="icon" href="res/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="res/favicon.ico" type="image/x-icon" />
+
+    <link rel="stylesheet" href="css/style.css">
+    <script type="module" src="index.js"></script>
+    <script type="text/javascript" src="scripts/navigation.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="scripts/charts.js"></script>
+
+</head>
+
+<body>
+    <header class="nav-wrapper" id="myTopnav">
+    </header>
+
+
+    <div class="site-content">
+
+    </div>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-storage.js"></script>
+
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBF9sWLpPio5u4Ysahf6PtS1NQkto-3-i0",
+            authDomain: "anahush-expense-manager-7b3e4.firebaseapp.com",
+            databaseURL: "https://anahush-expense-manager-7b3e4.firebaseio.com",
+            projectId: "anahush-expense-manager-7b3e4",
+            storageBucket: "anahush-expense-manager-7b3e4.appspot.com",
+            messagingSenderId: "763288193221",
+            appId: "1:763288193221:web:e146ee928e93f0d83d48ac"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
+        const auth = firebase.auth();
+        const db = firebase.database();
+        const storage = firebase.storage();
+    </script>
+</body>
+
+</html>
