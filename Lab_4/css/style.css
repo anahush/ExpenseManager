@@ -681,8 +681,16 @@ table th {
 
 
 table.budget {
-    width: 90%;
+    width: 100%;
+    margin-bottom: 0;
 }
+
+.table-budget-div {
+    width: 90%;
+    margin: auto;
+    overflow-x: auto;
+}
+
 table.budget th {
     background-color: white;
     color: black;
@@ -693,6 +701,10 @@ table.budget tr:nth-child(odd){background-color: white}
 table.budget  td.spanned {
     background-color: #43A047;
     color: white;
+}
+
+table.budget td {
+    min-width: 100px;
 }
 
 details {
@@ -1073,7 +1085,8 @@ footer * {
 		padding:10px 5px;
 		-moz-box-sizing:border-box;
 		-webkit-box-sizing:border-box;
-		box-sizing:border-box;
+        box-sizing:border-box;
+        word-wrap:break-word;
     }
     
     table tr:nth-child(even){background-color: white}

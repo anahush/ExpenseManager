@@ -1,45 +1,12 @@
+import ShortStatisticsPartial from './shortStatisticsPartial.js';
+
 let Plans = {
-    render: async() => {
+    render: async (dataPlans, dataStatistics) => {
+        Plans.data = dataPlans;
+        Plans.dataStatistics = dataStatistics;
         return `
         <div class="site-content">
-        <aside>
-            <h2>Short statistics</h2>
-            <ul class="statistics-list">
-                <li>
-                    <h3>Balance</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <h3>Income</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <h3>Expense</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </aside>
+        ${Plans.renderAside()}
 
         <main class="transactions">
             <h1>Plans</h1>
@@ -91,58 +58,62 @@ let Plans = {
                         <span class="close-modal">&times;</span>
                     </div>
                 </div>
-                <table class="table-plans">
-                    <thead>
-                        <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td data-th="Date"><time>date_1</time></td>
-                            <td data-th="Description"><button
-                                    class="text-like-button in-table open-modal">descr_1</button></td>
-                            <td data-th="Amount">amount_1</td>
-                        </tr>
-                        <tr>
-                            <td data-th="Date"><time>date_2</time></td>
-                            <td data-th="Description"><button
-                                    class="text-like-button in-table open-modal">descr_2</button></td>
-                            <td data-th="Amount">amount_2</td>
-                        </tr>
-                        <tr>
-                            <td data-th="Date"><time>date_3</time></td>
-                            <td data-th="Description"><button
-                                    class="text-like-button in-table open-modal">descr_3</button></td>
-                            <td data-th="Amount">amount_3</td>
-                        </tr>
-                        <tr>
-                            <td data-th="Date"><time>date_4</time></td>
-                            <td data-th="Description"><button
-                                    class="text-like-button in-table open-modal">descr_4</button></td>
-                            <td data-th="Amount">amount_4</td>
-                        </tr>
-                        <tr>
-                            <td data-th="Date"><time>date_5</time></td>
-                            <td data-th="Description"><button
-                                    class="text-like-button in-table open-modal">descr_5</button></td>
-                            <td data-th="Amount">amount_5</td>
-                        </tr>
-                        <tr>
-                            <td data-th="Date"><time>date_6</time></td>
-                            <td data-th="Description"><button
-                                    class="text-like-button in-table open-modal">descr_6</button></td>
-                            <td data-th="Amount">amount_6</td>
-                        </tr>
-                    </tbody>
-                </table>
+                ${Plans.renderTable()}
             </div>
         </main>
     </div>
         `
-    }
+    },
+
+    afterRender: async () => {
+
+    },
+
+    renderTable: () => {
+        return `
+        <table class="table-plans">
+            <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Amount</th>
+                    </tr>
+            </thead>
+            <tbody>
+                ${Plans.renderTableContent()}
+            </tbody>
+        </table>
+        `
+    },
+
+    renderTableContent: () => {
+        let markup = ``;
+        Plans.data.forEach(element => {
+            markup += Plans.renderTR(element);
+        });
+        return markup;
+    },
+
+    renderTR: (element) => {
+        return `
+        <tr>
+            <td data-th="Date"><time>${element.date}</time></td>
+            <td data-th="Description">
+                <buttonclass="text-like-button in-table open-modal">${element.description}</button>
+            </td>
+            <td data-th="Amount">${element.amount}</td>
+        </tr>
+        `
+    },
+
+    renderAside: () => {
+        return `
+        <aside>
+            <h2>Short statistics</h2>
+                ${ShortStatisticsPartial.render(Plans.dataStatistics)}
+        </aside>
+        `
+    },
 };
 
 export default Plans;

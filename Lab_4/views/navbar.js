@@ -1,5 +1,5 @@
 let Navbar = {
-    render: async() => {
+    render: async () => {
         return `
         <header class="nav-wrapper" id="myTopnav">
             <nav>
@@ -20,6 +20,14 @@ let Navbar = {
     },
 
     renderButton: () => {
+        // firebase.auth().onAuthStateChanged((user) => {
+        //     if (user) {
+        //         return Navbar.renderSignOutButton();
+        //     } else {
+        //         return Navbar.renderSignInButton();
+        //     }
+        // });
+
         if (auth.currentUser) {
             return Navbar.renderSignOutButton();
         } else {

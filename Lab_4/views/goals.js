@@ -1,45 +1,12 @@
+import ShortStatisticsPartial from './shortStatisticsPartial.js';
+
 let Goals = {
-    render: async() => {
+    render: async (dataGoals, dataStatistics) => {
+        Goals.data = dataGoals;
+        Goals.dataStatistics = dataStatistics;
         return `
         <div class="site-content">
-        <aside>
-            <h2>Short statistics</h2>
-            <ul class="statistics-list">
-                <li>
-                    <h3>Balance</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <h3>Income</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <h3>Expense</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </aside>
+        ${Goals.renderAside()}
 
         <main class="transactions">
             <h1>Goals</h1>
@@ -109,78 +76,71 @@ let Goals = {
                         </form>
                     </div>
                 </div>
-                <table class="table-plans">
-                    <thead>
-                        <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Contributed</th>
-                            <th scope="col">Left</th>
-                            <th scope="col">Add/remove</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td data-th="Date"><time>date_1</time></td>
-                            <td data-th="Description"><button
-                                    class="text-like-button in-table open-modal">descr_1</button></td>
-                            <td data-th="Contributed">amount_1</td>
-                            <td data-th="Left">amount_1</td>
-                            <td data-th="Add/Remove"><a class="in-header open-modal-add"><img src="res/add.png" /></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td data-th="Date"><time>date_2</time></td>
-                            <td data-th="Description"><button class="text-like-button in-table open-modal">descr_2</a>
-                            </td>
-                            <td data-th="Contributed">amount_2</td>
-                            <td data-th="Left">amount_2</td>
-                            <td data-th="Add/Remove"><a class="in-header open-modal-add"><img src="res/add.png" /></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td data-th="Date"><time>date_3</time></td>
-                            <td data-th="Description"><button
-                                    class="text-like-button in-table open-modal"></button>descr_3</a></td>
-                            <td data-th="Contributed">amount_3</td>
-                            <td data-th="Left">amount_3</td>
-                            <td data-th="Add/Remove"><a class="in-header open-modal-add"><img src="res/add.png" /></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td data-th="Date"><time>date_4</time></td>
-                            <td data-th="Description"><button
-                                    class="text-like-button in-table open-modal">descr_4</button></td>
-                            <td data-th="Contributed">amount_4</td>
-                            <td data-th="Left">amount_4</td>
-                            <td data-th="Add/Remove"><a class="in-header open-modal-add"><img src="res/add.png" /></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td data-th="Date"><time>date_5</time></td>
-                            <td data-th="Description"><button
-                                    class="text-like-button in-table open-modal">descr_5</button></td>
-                            <td data-th="Contributed">amount_5</td>
-                            <td data-th="Left">amount_5</td>
-                            <td data-th="Add/Remove"><a class="in-header open-modal-add"><img src="res/add.png" /></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td data-th="Date"><time>date_6</time></td>
-                            <td data-th="Description"><button
-                                    class="text-like-button in-table open-modal">descr_6</button></td>
-                            <td data-th="Contributed">amount_6</td>
-                            <td data-th="Left">amount_6</td>
-                            <td data-th="Add/Remove"><a class="in-header open-modal-add"><img src="res/add.png" /></a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                ${Goals.renderTable()}
             </div>
         </main>
     </div>
         `
-    }
+    },
+
+    renderTable: () => {
+        return `
+        <table class="table-plans">
+            <thead>
+                <tr>
+                    <th scope="col">Due</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Contributed</th>
+                    <th scope="col">Left</th>
+                    <th scope="col">Add/remove</th>
+                </tr>
+            </thead>
+            <tbody>
+            ${Goals.renderTableContent()}
+            </tbody>
+        </table>
+        `
+    },
+
+    renderTableContent: () => {
+        let markup = ``;
+        Goals.data.forEach(element => {
+            markup += Goals.renderTR(element);
+        });
+        return markup;
+    },
+
+    renderTR: (element) => {
+        let left;
+        if (element.contributed) {
+            left = element.amount - element.contributed;
+        } else {
+            left = element.amount;
+            element.contributed = "0";
+        }
+        return `
+        <tr>
+           <td data-th="Due"><time>${element.due}</time></td>
+            <td data-th="Description">
+                <button class="text-like-button in-table open-modal">${element.description}</button>
+            </td>
+            <td data-th="Contributed">${element.contributed}</td>
+            <td data-th="Left">${left}</td>
+            <td data-th="Add/Remove">
+                <a class="in-header open-modal-add"><img src="res/add.png"/></a>
+            </td>
+        </tr>
+        `
+    },
+
+    renderAside: () => {
+        return `
+        <aside>
+            <h2>Short statistics</h2>
+                ${ShortStatisticsPartial.render(Goals.dataStatistics)}
+        </aside>
+        `
+    },
 };
 
 export default Goals;

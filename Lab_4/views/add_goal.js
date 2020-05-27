@@ -1,48 +1,13 @@
 import DateTimeConvert from "../services/dateTimeConvert.js";
 import DatabaseUtils from '../services/databaseUtils.js';
+import ShortStatisticsPartial from "./shortStatisticsPartial.js";
 
 let AddGoal = {
-    render: async () => {
+    render: async (dataStatistics) => {
+        AddGoal.dataStatistics = dataStatistics;
         return `
         <div class="site-content">
-        <aside class="aside-add">
-            <h2>Short statistics</h2>
-            <ul class="statistics-list">
-                <li>
-                    <h3>Balance</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <h3>Income</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <h3>Expense</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </aside>
+        ${AddGoal.renderAside()}
 
         <main class="add-transaction">
             <div class="container-transaction">
@@ -122,15 +87,16 @@ let AddGoal = {
         const formGoal = document.querySelector('#add-goal-form');
         let userID = auth.currentUser.uid;
         let fileUpload = document.getElementById("image-goal");
-        let downloadLink = null;
         let currentTime = DateTimeConvert.convert();
 
         formGoal.addEventListener('submit', e => {
             e.preventDefault();
             let files = fileUpload.files;
             if (files.length == 0) {
-                alert("Image not provided!");
-                return;
+                alert("Picture was not selected. Default picture will be used instead.");
+                let downloadURL = "https://www.shareicon.net/data/512x512/2015/11/20/675119_sign_512x512.png";
+                AddGoal.sendFormData(formGoal, downloadURL, userID, currentTime);
+                return false;
             }
 
             var storageRef = storage.ref().child("images/" + userID + "/" + currentTime);
@@ -139,24 +105,38 @@ let AddGoal = {
             uploadTask.on('state_changed', function () {
                 uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
                     console.log('File available at ', downloadURL);
-                    downloadLink = downloadURL;
-                    DatabaseUtils.writeGoalData(AddGoal.getFormData(formGoal), downloadLink, userID, currentTime);
-                    window.location.hash = "#/";
+                    AddGoal.sendFormData(formGoal, downloadURL, userID, currentTime);
                 })
             })
         })
+    },
+
+    sendFormData: (formGoal, downloadURL, userID, currentTime) => {
+        DatabaseUtils.writeGoalData(AddGoal.getFormData(formGoal), downloadURL, userID, currentTime);
+        alert("Success!");
+        window.location.hash = "#/goals";
     },
 
     getFormData: (formGoal) => {
         return {
             description: formGoal['description-goal'].value,
             amount: formGoal['amount-goal'].value,
+            contributed: '0',
             type: formGoal['type-goal'].value,
             currency: formGoal['currency-goal'].value,
             category: formGoal['category-goal'].value,
             due: formGoal['due-goal'].value,
         }
-    }
+    },
+
+    renderAside: () => {
+        return `
+        <aside>
+            <h2>Short statistics</h2>
+                ${ShortStatisticsPartial.render(AddGoal.dataStatistics)}
+        </aside>
+        `
+    },
 };
 
 export default AddGoal;

@@ -52,8 +52,6 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
 
-        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-
         const auth = firebase.auth();
         const db = firebase.database();
         const storage = firebase.storage();

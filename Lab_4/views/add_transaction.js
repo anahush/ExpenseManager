@@ -1,48 +1,13 @@
 import DateTimeConvert from "../services/dateTimeConvert.js";
 import DatabaseUtils from "../services/databaseUtils.js";
+import ShortStatisticsPartial from "./shortStatisticsPartial.js";
 
 let AddTransaction = {
-    render: async () => {
+    render: async (dataStatistics) => {
+        AddTransaction.dataStatistics = dataStatistics;
         return `
         <div class="site-content">
-        <aside class="aside-add">
-            <h2>Short statistics</h2>
-            <ul class="statistics-list">
-                <li>
-                    <h3>Balance</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <h3>Income</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <h3>Expense</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </aside>
+        ${AddTransaction.renderAside()}
 
         <main class="add-transaction">
             <div class="container-transaction">
@@ -137,15 +102,16 @@ let AddTransaction = {
         const formTransaction = document.querySelector('#add-transaction-form');
         let userID = auth.currentUser.uid;
         let fileUpload = document.getElementById("image-transaction");
-        let downloadLink = null;
         let currentTime = DateTimeConvert.convert();
 
         formTransaction.addEventListener('submit', e => {
             e.preventDefault();
             let files = fileUpload.files;
             if (files.length == 0) {
-                alert("Image not provided!");
-                return;
+                alert("Picture was not selected. Default picture will be used instead.");
+                let downloadURL = "https://www.shareicon.net/data/512x512/2015/11/20/675119_sign_512x512.png";
+                AddTransaction.sendFormData(formTransaction, downloadURL, userID, currentTime);
+                return false;
             }
 
             var storageRef = storage.ref().child("images/" + userID + "/" + currentTime);
@@ -153,13 +119,16 @@ let AddTransaction = {
             uploadTask.on('state_changed', function () {
                 uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
                     console.log('File available at ', downloadURL);
-                    downloadLink = downloadURL;
-                    DatabaseUtils.writeTransactionData(AddTransaction.getFormData(formTransaction), downloadLink, userID, currentTime);
-
-                    window.location.hash = "#/";
+                    AddTransaction.sendFormData(formTransaction, downloadURL, userID, currentTime);
                 })
             })
         });
+    },
+
+    sendFormData: (formTransaction, downloadURL, userID, currentTime) => {
+        DatabaseUtils.writeTransactionData(AddTransaction.getFormData(formTransaction), downloadURL, userID, currentTime);
+        alert("Success!");
+        window.location.hash = "#/transactions";
     },
 
     getFormData: (formTransaction) => {
@@ -173,7 +142,16 @@ let AddTransaction = {
             account: formTransaction['account-transaction'].value,
             place: formTransaction['place-transaction'].value
         }
-    }
+    },
+
+    renderAside: () => {
+        return `
+        <aside>
+            <h2>Short statistics</h2>
+                ${ShortStatisticsPartial.render(AddTransaction.dataStatistics)}
+        </aside>
+        `
+    },
 };
 
 export default AddTransaction;

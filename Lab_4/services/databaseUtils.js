@@ -19,6 +19,7 @@ let DatabaseUtils = {
         planRef.child(currentTime).set({
             description: fields.description,
             amount: fields.amount,
+            contributed: fields.contributed,
             type: fields.type,
             currency: fields.currency,
             category: fields.category,

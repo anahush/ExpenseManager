@@ -1,48 +1,13 @@
 import DateTimeConvert from "../services/dateTimeConvert.js";
 import DatabaseUtils from "../services/databaseUtils.js";
+import ShortStatisticsPartial from "./shortStatisticsPartial.js";
 
 let AddPlan = {
-    render: async () => {
+    render: async (dataStatistics) => {
+        AddPlan.dataStatistics = dataStatistics;
         return `
         <div class="site-content">
-        <aside class="aside-add">
-            <h2>Short statistics</h2>
-            <ul class="statistics-list">
-                <li>
-                    <h3>Balance</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <h3>Income</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <h3>Expense</h3>
-                    <ul class="statistics-point-list">
-                        <li>
-                            <p>Card: "value"</p>
-                        </li>
-                        <li>
-                            <p>Cash: "value"</p>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </aside>
+        ${AddPlan.renderAside()}
 
         <main class="add-transaction">
             <div class="container-transaction">
@@ -148,14 +113,15 @@ let AddPlan = {
         const formPlan = document.querySelector('#add-plan-form');
         let userID = auth.currentUser.uid;
         let fileUpload = document.getElementById("image-plan");
-        let downloadLink = null;
         let currentTime = DateTimeConvert.convert();
 
         formPlan.addEventListener('submit', e => {
             e.preventDefault();
             let files = fileUpload.files;
             if (files.length == 0) {
-                alert("Image not provided!");
+                alert("Picture was not selected. Default picture will be used instead.");
+                let downloadURL = "https://www.shareicon.net/data/512x512/2015/11/20/675119_sign_512x512.png";
+                AddPlan.sendFormData(formPlan, downloadURL, userID, currentTime);
                 return false;
             }
 
@@ -164,15 +130,16 @@ let AddPlan = {
             uploadTask.on('state_changed', function () {
                 uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
                     console.log('File available at ', downloadURL);
-                    downloadLink = downloadURL;
-
-                    DatabaseUtils.writePlanData(AddPlan.getFormData(formPlan), downloadLink, userID, currentTime);
-
-                    alert("success!");
-                    window.location.hash = "#/";
+                    AddPlan.sendFormData(formPlan, downloadURL, userID, currentTime);
                 })
             })
         });
+    },
+
+    sendFormData: (formPlan, downloadURL, userID, currentTime) => {
+        DatabaseUtils.writePlanData(AddPlan.getFormData(formPlan), downloadURL, userID, currentTime);
+        alert("Success!");
+        window.location.hash = "#/plans";
     },
 
     getFormData: (formPlan) => {
@@ -187,7 +154,16 @@ let AddPlan = {
             account: formPlan['account-plan'].value,
             place: formPlan['place-plan'].value
         }
-    }
+    },
+
+    renderAside: () => {
+        return `
+        <aside>
+            <h2>Short statistics</h2>
+                ${ShortStatisticsPartial.render(AddPlan.dataStatistics)}
+        </aside>
+        `
+    },
 };
 
 export default AddPlan;
