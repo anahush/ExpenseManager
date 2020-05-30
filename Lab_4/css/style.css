@@ -8,7 +8,6 @@ body {
 
 div.site-content {
     width: 100%;
-    height: 100%;
 }
 
 div#error-message {
@@ -22,6 +21,11 @@ main {
 
 div.content {
     height: 100%;
+}
+
+/* Can't make it work on submit without jQuery */
+input:invalid {
+    border: 0.5px solid red;
 }
 
 .menuBtn {
@@ -199,6 +203,8 @@ main.index article {
     border: 1px solid;
     background: rgba(255,255,255,0.8);
     padding-bottom: 1%;
+    position: sticky;
+    top: 20%;
 }
 
 main.login {
@@ -572,11 +578,13 @@ div#balance_chart, div#trend_chart {
     margin: 0 auto 5% auto;
     width:90%;
     min-width: 70%;
+    height: 230px;
 }
 
 div#income_graph, div#expense_graph {
     width:90%;
     margin: 0 auto 5% auto;
+    height: 400px;
 }
 
 form.chart-form {
@@ -587,7 +595,7 @@ table{
 	width:95%;
     margin:auto;
     margin-bottom: 7%;
-	max-width:960px;
+	/* max-width:960px; */
 	border-collapse:collapse;
 }
 table td{
@@ -689,11 +697,23 @@ table.budget {
     width: 90%;
     margin: auto;
     overflow-x: auto;
+    max-width: 900px;
 }
 
 table.budget th {
     background-color: white;
     color: black;
+    min-width: 85px;
+    text-align: center;
+    padding: 2% 1px;
+}
+
+table.budget th:first-child{
+    min-width: 140px;
+}
+
+table.budget td:first-child:not(.spanned) {
+    border-right: 1px solid black;
 }
 
 table.budget tr:nth-child(even){background-color: white}
@@ -701,10 +721,6 @@ table.budget tr:nth-child(odd){background-color: white}
 table.budget  td.spanned {
     background-color: #43A047;
     color: white;
-}
-
-table.budget td {
-    min-width: 100px;
 }
 
 details {

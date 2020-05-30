@@ -1,33 +1,36 @@
+import CurrencyUtils from "../services/currencyUtils.js";
+
 let ShortStatisticsPartial = {
     render: (data) => {
         ShortStatisticsPartial.data = data;
         let incomeCard = 0, incomeCash = 0, expenseCard = 0, expenseCash = 0;
         ShortStatisticsPartial.data.forEach(element => {
+            let amountUSD = CurrencyUtils.convertToUSD(Number(element.amount), element.currency);
             if (element.type == "Income") {
                 if (element.account == "Card") {
-                    incomeCard += Number(element.amount);
+                    incomeCard += amountUSD;
                 } else {
-                    incomeCash += Number(element.amount);
+                    incomeCash += amountUSD;
                 }
             } else if (element.type == "Expense") {
                 if (element.account == "Card") {
-                    expenseCard += Number(element.amount);
+                    expenseCard += amountUSD;
                 } else {
-                    expenseCash += Number(element.amount);
+                    expenseCash += amountUSD;
                 }
             }
         });
 
         return `
-        <ul class="statistics-list">
+        <ul class="statistics-list" id='statistics-list'>
                 <li>
                     <h3>Balance</h3>
                     <ul class="statistics-point-list">
                         <li>
-                            <p>Card: ${incomeCard - expenseCard}</p>
+                            <p>Card: ${CurrencyUtils.getAmountWithCurrency(incomeCard - expenseCard, "USD")}</p>
                         </li>
                         <li>
-                            <p>Cash: ${incomeCash - expenseCash}</p>
+                            <p>Cash: ${CurrencyUtils.getAmountWithCurrency(incomeCash - expenseCash, "USD")}</p>
                         </li>
                     </ul>
                 </li>
@@ -35,10 +38,10 @@ let ShortStatisticsPartial = {
                     <h3>Income</h3>
                     <ul class="statistics-point-list">
                         <li>
-                            <p>Card: ${incomeCard}</p>
+                            <p>Card: ${CurrencyUtils.getAmountWithCurrency(Number(incomeCard), "USD")}</p>
                         </li>
                         <li>
-                            <p>Cash: ${incomeCash}</p>
+                            <p>Cash: ${CurrencyUtils.getAmountWithCurrency(Number(incomeCash), "USD")}</p>
                         </li>
                     </ul>
                 </li>
@@ -46,10 +49,10 @@ let ShortStatisticsPartial = {
                     <h3>Expense</h3>
                     <ul class="statistics-point-list">
                         <li>
-                            <p>Card: ${expenseCard}</p>
+                            <p>Card: ${CurrencyUtils.getAmountWithCurrency(Number(expenseCard), "USD")}</p>
                         </li>
                         <li>
-                            <p>Cash: ${expenseCash}</p>
+                            <p>Cash: ${CurrencyUtils.getAmountWithCurrency(Number(expenseCash), "USD")}</p>
                         </li>
                     </ul>
                 </li>

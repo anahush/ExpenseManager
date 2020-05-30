@@ -16,13 +16,13 @@ let AddTransaction = {
                         <div class="wrap-input validate-input" data-validate="Description is required">
                             <label class="label-input" for="description-transaction">Description</label>
                             <input class="input input-form" type="text" id="description-transaction" name="description"
-                                placeholder="Enter description">
+                                placeholder="Enter description" required>
                             <span class="focus-input"></span>
                         </div>
                         <div class="wrap-input validate-input" data-validate="Amount is required">
                             <label class="label-input" for="amount-transaction">Amount</label>
                             <input class="input input-form" id="amount-transaction" type="number" name="amount"
-                                placeholder="Enter amount">
+                                placeholder="Enter amount" required>
                             <span class="focus-input"></span>
                         </div>
                         <div class="wrap-input input-select">
@@ -60,7 +60,7 @@ let AddTransaction = {
                         </div>
                         <div class="wrap-input input-date">
                             <label class="label-input" for="date-transaction">Date</label>
-                            <input class="input date-input" id="date-transaction" type="date" name="date">
+                            <input class="input date-input" id="date-transaction" type="date" name="date" required>
                         </div>
                         <div class="wrap-input input-select">
                             <label class="label-input" for="account-transaction">Account</label>
@@ -81,9 +81,9 @@ let AddTransaction = {
                             <label class="label-input" for="image-transaction">Image</label>
                             <input class="input-file" id="image-transaction" type="file" accept="image/*" name="image" class="input-file"
                                 placeholder="Upload image">
-                            <label for="image-transaction" class="btn btn-tertiary js-labelFile">
+                            <label for="image-transaction" class="btn btn-tertiary js-labelFile" id="button-input-file">
                                 <img class="upload" id="upload-picture" src="res/upload.png">
-                                <span class="js-fileName">Загрузить файл</span>
+                                <span class="js-fileName" id="file-name">Загрузить файл</span>
                             </label>
                         </div>
                         <div class="buttons">
@@ -104,13 +104,40 @@ let AddTransaction = {
         let fileUpload = document.getElementById("image-transaction");
         let currentTime = DateTimeConvert.convert();
 
+        let key = 0;
+        db.ref('transactions/' + userID + "/").limitToLast(1).once("value").then((snapshot) => {
+            let val = snapshot.val();
+            if (val == null || typeof val == "undefined") {
+                return;
+            }
+            let lastKey = Number(Object.keys(val)[0]);
+            if (lastKey != null && typeof lastKey != "undefined" && lastKey >= 0) {
+                key = lastKey + 1;
+            }
+        })
+
+        fileUpload.addEventListener('change', () => {
+            let buttonFileInput = document.getElementById('button-input-file');
+            if (buttonFileInput) {
+                buttonFileInput.style.color = "green";
+                buttonFileInput.style.border = "2px solid green";
+                let spanPrevious = document.getElementById('file-name');
+                let spanFileName = document.createElement('span');
+                spanFileName.setAttribute('class', 'js-fileName');
+                spanFileName.setAttribute('id', 'file-name');
+                spanFileName.innerHTML = fileUpload.files[0].name;
+                spanPrevious.replaceWith(spanFileName);
+            }
+        })
+
         formTransaction.addEventListener('submit', e => {
             e.preventDefault();
+
             let files = fileUpload.files;
             if (files.length == 0) {
                 alert("Picture was not selected. Default picture will be used instead.");
                 let downloadURL = "https://www.shareicon.net/data/512x512/2015/11/20/675119_sign_512x512.png";
-                AddTransaction.sendFormData(formTransaction, downloadURL, userID, currentTime);
+                AddTransaction.sendFormData(formTransaction, downloadURL, userID, key);
                 return false;
             }
 
@@ -119,15 +146,14 @@ let AddTransaction = {
             uploadTask.on('state_changed', function () {
                 uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
                     console.log('File available at ', downloadURL);
-                    AddTransaction.sendFormData(formTransaction, downloadURL, userID, currentTime);
+                    AddTransaction.sendFormData(formTransaction, downloadURL, userID, key);
                 })
             })
         });
     },
 
-    sendFormData: (formTransaction, downloadURL, userID, currentTime) => {
-        DatabaseUtils.writeTransactionData(AddTransaction.getFormData(formTransaction), downloadURL, userID, currentTime);
-        alert("Success!");
+    sendFormData: (formTransaction, downloadURL, userID, key) => {
+        DatabaseUtils.writeTransactionData(AddTransaction.getFormData(formTransaction), downloadURL, userID, key);
         window.location.hash = "#/transactions";
     },
 
@@ -145,6 +171,15 @@ let AddTransaction = {
     },
 
     renderAside: () => {
+        if (AddTransaction.dataStatistics == null) {
+            return `
+            <aside>
+            <h2>Short statistics</h2>
+                ${ShortStatisticsPartial.render([{ type: "Income", amount: "0", currency: "USD" }, { type: "Expense", amount: "0", currency: "USD" }])}
+            </aside>
+
+            `
+        }
         return `
         <aside>
             <h2>Short statistics</h2>

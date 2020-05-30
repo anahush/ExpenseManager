@@ -5,9 +5,9 @@ let Register = {
             <div class="login-page">
                 <div class="form-login">
                 <form class="register-form" id="register-form">
-                    <input type="text" id="loginRegister" placeholder="name" />
-                    <input type="password" id="passwordRegister" placeholder="password" />
-                    <input type="text" id="emailRegister" placeholder="email address" />
+                    <input type="text" id="loginRegister" placeholder="name" required/>
+                    <input type="password" id="passwordRegister" placeholder="password" required/>
+                    <input type="email" id="emailRegister" placeholder="email address" required/>
                     <button class="register" id="registerBtn">create</button>
                     <p class="message">Already registered? <a href="#/login">Sign In</a></p>
                 </form>

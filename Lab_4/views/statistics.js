@@ -1,4 +1,5 @@
 import ShortStatisticsPartial from "./shortStatisticsPartial.js";
+import ChartUtilsCanvas from "../services/chartUtils.js";
 
 let Statistics = {
     render: async (dataStatistics) => {
@@ -12,13 +13,13 @@ let Statistics = {
             <article class="statistics-article">
                 <section class="statistics-section chart-container">
                     <h2>Income</h2>
-                    <img class="temp-chart" src="res/chart_3.png">
-                    <!-- <div id="income_graph"></div> -->
+                    <!-- <img class="temp-chart" src="res/chart_3.png"> -->
+                    <div id="income_graph"></div>
                 </section>
                 <section class="statistics-section chart-container">
                     <h2>Expense</h2>
-                    <img class="temp-chart" src="res/chart_4.png">
-                    <!-- <div id="expense_graph"></div> -->
+                    <!-- <img class="temp-chart" src="res/chart_4.png"> -->
+                    <div id="expense_graph"></div>
                 </section>
             </article>
             <article class="table-article">
@@ -33,7 +34,7 @@ let Statistics = {
     },
 
     afterRender: () => {
-        Statistics.forScroll();
+        ChartUtilsCanvas.drawDonutCharts(Statistics.data);
     },
 
     renderTable: () => {
@@ -62,6 +63,9 @@ let Statistics = {
     },
 
     renderTableBody: () => {
+        if (Statistics.data == null) {
+            return "";
+        }
         let catData = Statistics.createCatData();
         return `
         <tr>
@@ -101,24 +105,6 @@ let Statistics = {
         }
         return markup;
     },
-
-    // createMonthTable: () => {
-    //     let mtIncome = new Array(12), mtExpense = new Array(12);
-    //     mtIncome.fill([]), mtExpense.fill([]);
-    //     dataStatistics.forEach(element => {
-    //         let date = new Date(element.date);
-    //         if (date.getFullYear() == new Date().getFullYear()) {
-    //             let month = date.getMonth();
-    //             if (element.type == "Income") {
-    //                 mtIncome[month].push({amount: element.amount, category: element.category});
-    //             } else {
-    //                 mtExpense[month].push({amount: element.amount, category: element.catefory});
-    //             }
-    //         }
-    //     });
-    //     return {income: mtIncome, expense: mtExpense};
-    // },
-
     createCatData: () => {
         let cIncome = {
             "Food": [],
@@ -151,6 +137,15 @@ let Statistics = {
     },
 
     renderAside: () => {
+        if (Statistics.data == null) {
+            return `
+            <aside>
+            <h2>Short statistics</h2>
+                ${ShortStatisticsPartial.render([{ type: "Income", amount: "0", currency: "USD" }, { type: "Expense", amount: "0", currency: "USD" }])}
+            </aside>
+
+            `
+        }
         return `
         <aside>
             <h2>Short statistics</h2>

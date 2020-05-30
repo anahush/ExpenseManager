@@ -5,8 +5,8 @@ let Login = {
             <div class="login-page">
                 <div class="form-login">
                     <form class="login-form" id="login-form">
-                        <input type="text" id="emailLogin" placeholder="email" />
-                        <input type="password" id="passwordLogin" placeholder="password" />
+                        <input type="email" id="emailLogin" placeholder="email" required/>
+                        <input type="password" id="passwordLogin" placeholder="password" required/>
                         <button>login</button>
                         <p class="message">Not registered? <a href="#/register">Create an account</a></p>
                     </form>
