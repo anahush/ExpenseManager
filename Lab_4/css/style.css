@@ -1,0 +1,1144 @@
+body {
+    font-family: sans-serif;
+    position: relative;
+    overflow: auto;
+    background: url("../res/wood.jpg") repeat 0 0;
+    background-attachment: fixed;
+}
+
+div.site-content {
+    width: 100%;
+}
+
+div#error-message {
+    margin-top: 20%;
+    margin-left: 40%;
+}
+
+main {
+    margin-top: 12%;
+}
+
+div.content {
+    height: 100%;
+}
+
+/* Can't make it work on submit without jQuery */
+input:invalid {
+    border: 0.5px solid red;
+}
+
+.menuBtn {
+    display: none;
+}
+
+nav {
+    width: 97%;
+}
+
+header {
+    background-color: white;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    z-index: 1000;
+    box-shadow: 0 0 10px 0 black;
+    height: 17%;
+}
+
+header ul {
+    list-style: none;
+    display: flex;
+    padding-left: 0;
+}
+
+header li:hover {
+    cursor: pointer;
+}
+
+header li.nav-button {
+    margin-top: 10px;
+}
+
+header ul li:not(:first-child){
+    flex: 1;
+    align-self: flex-start;
+}
+
+header ul li.longer-text {
+    flex: 2;
+    max-width: 7em;
+}
+
+.float-right {
+    margin-left: 20%;
+    flex: 2;
+    max-width: 8em;
+}
+
+header ul li a {
+    /* float: left; */
+    display: block;
+    color: black; 
+    text-align: center;
+    padding: 1% 0;
+    text-decoration: none;
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+header ul li a.first {
+    color: transparent;
+    font-size: 0;
+}
+  
+header ul li .icon {
+    display: none;
+}
+
+header ul li .home {
+    height: 60px;
+    width: 60px;
+}
+
+@media screen and (min-width: 900px) {
+
+    div.site-content {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+
+    main {
+        flex: 2;
+        order: -1;
+        margin-top: 12%;
+    }
+
+    main.index {
+        margin-top: 10%;
+        margin-left: 3%;
+    }
+
+    main.transactions {
+        margin-top: 12%;
+    }
+
+    main.statistics {
+        margin-top: 10%;
+    }
+    
+    aside {
+        flex: 1;
+        max-width: 20%;
+        flex-basis: 20%;
+        margin: 12% 2% auto 5%;
+        background-color: white;
+        box-shadow: 0 0 25px 0 black;
+        height: auto;
+        position: sticky;
+        top: 25%;
+    }
+
+    aside.index {
+        margin-right: 1%;
+        margin-top: 11.5%;
+    }
+
+    aside.aside-add {
+        margin-top: 13.5%;
+    }
+
+    .sign-in-button, .sign-out-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 0.7em;
+        text-decoration: none;
+        text-transform: uppercase;
+        border-radius: 15%;
+    }
+
+    header ul li:not(.home-link) {
+        margin: 2%;
+    }
+
+    header ul li.home-link {
+        margin: 0 2% 2%;
+    }
+
+    header ul li.nav-button {
+        margin-top: 7%;
+    }
+
+    header ul li a {
+        margin: auto 2%;
+    }
+
+    header ul li a.sign-in-button, header ul li a.sign-out-button {
+        margin: auto;
+    }
+}
+
+
+.sign-in-button:hover, .sign-out-button:hover {
+    background-color: gray;
+    color: black;
+}
+
+.sign-in-button:active, .sign-out-button:active {
+    background-color: #555;
+}
+
+main.index {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+main.index article {
+    margin: 4% 7%;
+    border-color: black;
+    border: 1px solid;
+    background: rgba(255,255,255,0.8);
+    padding-bottom: 1%;
+    position: sticky;
+    top: 20%;
+}
+
+main.login {
+    display: block;
+}
+
+main.add-transaction {
+    width: 70%;
+    margin-left: 5%;
+}
+
+main.transactions {
+    background: rgba(255,255,255,0.8);
+    width: 70%;
+    margin-left: 3%;
+    padding: 1%;
+    margin-bottom: 3%;
+}
+
+.container-transaction {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 2%;
+}
+
+.wrap-transaction {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-grow: 1;
+  padding: 5%;
+}
+
+.wrap-input {
+    width: 100%;
+    position: relative;
+    border-bottom: 2px solid #d9d9d9;
+    padding-bottom: 1%;
+    margin-bottom: 2.5%;
+    text-align: left;
+}
+
+div.add-option {
+    display: none;
+}
+
+.label-input {
+    font-size: 0.9em;
+    color: #666666;
+    line-height: 1.5;
+    padding-left: 0.5%;
+}
+
+.input-form {
+    display: block;
+    width: 100%;
+    background: transparent;
+    font-size: 1.1em;
+    color: #333333;
+    line-height: 1.2;
+    padding: 0 0.5%;
+    border:0;
+}
+
+.search-transaction {
+    display: block;
+    width: 100%;
+    font-size: 1.1em;
+    background: rgba(255,255,255,0.8);
+    color: #333333;
+    line-height: 1.2;
+    padding: 0 0.5%;
+    border:0;
+}
+
+.select-transaction {
+    border: 0;
+    width: 100%;
+    font-size: 1.1em;
+    line-height: 1.2;
+    padding: 0 0.5%;
+    margin-top: 2%;
+}
+
+.select-tag, .select-type {
+    border: 0;
+    width: 35%;
+    font-size: 1.1em;
+    line-height: 1.2;
+    padding: 0 0.5%;
+}
+
+.select-tag-transactions {
+    margin-top: 2%;
+}
+
+.select-tag-plans, .select-type-plans {
+    width: 45%;
+}
+
+select::-ms-expand { 
+    display: none; 
+}
+
+ul.statistics-list, ul.goals-list, ul.statistics-point-list, ul.goals-points-list * {
+    list-style: none;
+}
+
+.date-input {
+    border: 0;
+    width: 100%;
+    font-size: 1.1em;
+    line-height: 1.2;
+    padding: 0 0.5%;
+}
+
+.period-input {
+    width: 20%;
+    margin-right: 2%;
+}
+
+.focus-input {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.focus-input::before {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+  
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+  
+    background: #7f7f7f;
+}
+
+input.input-form {
+    margin-top: 1%;
+}
+
+.btn-tertiary {
+    color: #555;
+    padding: 0;
+    line-height: 40px;
+    width: 70%;
+    margin: auto;
+    display: block;
+    border: 2px solid #555;
+}
+
+.btn-tertiary:hover, .btn-tertiary:focus {
+    color: #888;
+    border-color: #888;
+}
+
+details {
+    width: 98%;
+}
+
+.details-content {
+    margin-top: 1%;
+    background-color: rgba(150,150,150,0.3);
+    padding: 2% 0 2% 1%;
+    box-shadow: 0 0 2px 0 black;
+}
+
+.text-like-button {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    font-size: 1em;
+    margin: 0 5px;
+}
+
+.text-like-button.in-table {
+    margin: 0;
+}
+
+.input-file {
+    width: .1px;
+    height: .1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.input-file + .js-labelFile {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 1%;
+    cursor: pointer;
+}
+
+.js-filename {
+    margin-left: 1%;
+}
+
+.input-file + .js-labelFile .icon::before {
+    content: "\f093";
+}
+
+.input-file + .js-labelFile.has-file .icon::before {
+    content: "\f00c";
+    color: #5AAC7B;
+}
+
+.transaction-submit {
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    background-color: #4CAF50;
+    width: 30%;
+    border: 0;
+    padding: 2%;
+    color: white;
+    text-decoration: none;
+    font-size: 0.8em;
+    transition: all 0.3 ease;
+    -webkit-transititon: all 0.3 ease;
+    cursor: pointer;
+    margin: auto 2%;
+}
+
+.buttons {
+    text-align: center;
+}
+
+.transaction-submit + .cancel {
+    background-color: red;
+}
+
+.transactions-first-row > * {
+    display: inline;
+}
+
+.transactions-second-row {
+    display: flex;
+}
+
+.transactions-second-row > .select-tag-transactions {
+    margin-right: 1%;
+}
+
+.transactions-second-row > .dates-period {
+    flex: 50%;
+    margin: 2% 5% auto 0;
+    display: flex;
+    width: 100%;
+}
+
+.transactions-second-row .period-label {
+    margin-left: 2%;
+}
+
+.dates-period > .date-transaction {
+    flex: 50%;
+    display: flex;
+}
+
+.date-transaction > .period-label {
+    flex: none;
+    margin-right: 5%;
+}
+
+.date-transaction > .period-input {
+    flex: 2;
+}
+
+.transactions-second-row > .select-tag-transactions {
+    flex: 50%;
+}
+
+.date-transaction {
+    display: inline;
+}
+
+.plans {
+    display: flex;
+    margin-top: 2%;
+}
+
+.plans > .select-tag-plans {
+    flex: 50%;
+}
+
+.plans > .select-tag-plans:first-child {
+    margin-left: 0;
+}
+
+.plans > .select-tag-plans:last-child {
+    margin-left: 5%;
+    margin-right: 1%;
+}
+
+.search {
+    width: 50%;
+}
+
+ul.transactions-links {
+    margin: 0; 
+    padding: 4px; 
+   }
+
+   ul.transactions-links li {
+    display: inline; 
+    padding: 3px; 
+   }
+
+   ul.transactions-links li:first-child {
+       margin-left: 2%;
+   }
+
+article.statistics-article {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+article.table-article {
+    display: block;
+    background: rgba(255,255,255,0.8);
+    width: 94%;
+    margin: 2% 6% 3%;
+    padding-bottom: 2%;
+    padding-top: 5px;
+}
+
+section.statistics-section {
+    background: rgba(255,255,255,0.8);
+    margin: auto 0 3% 12%;
+}
+
+h1 {
+    text-align: center;
+}
+
+h1.statistics-text {
+    color: whitesmoke;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 5%;
+}
+
+.error-text {
+    color: whitesmoke;
+}
+
+.in-header {
+    margin-left: 6%;
+    cursor: pointer;
+}
+
+.in-header img {
+    height: 20px;
+    width: 20px;
+}
+
+div#balance_chart, div#trend_chart {
+    margin: 0 auto 5% auto;
+    width:90%;
+    min-width: 70%;
+    height: 230px;
+}
+
+div#income_graph, div#expense_graph {
+    width:90%;
+    margin: 0 auto 5% auto;
+    height: 400px;
+}
+
+form.chart-form {
+    text-align: center;
+}
+
+table{
+	width:95%;
+    margin:auto;
+    margin-bottom: 7%;
+	/* max-width:960px; */
+	border-collapse:collapse;
+}
+table td{
+	border:none;
+    padding:2%;
+    text-align: left;
+}
+
+table th {
+    text-align: left;
+    padding:2%;
+}
+
+table td.spanned {
+    text-align: center;
+}
+
+table tr:nth-child(even){background-color: white}
+table tr:nth-child(odd){background-color: gainsboro}
+
+table th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.login-page {
+    max-width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+.form-login {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    /* padding: 5% 5%; */
+    text-align: center;
+    margin-top: 2%;
+}
+
+.form-login input {
+    font-family: "Roboto", sans-serif;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 2%;
+    /* padding: 2%; */
+    height: 2.3em;
+    box-sizing: border-box;
+    font-size: 0.8em;
+}
+
+.form-login button {
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    background-color: #4CAF50;
+    width: 100%;
+    border: 0;
+    /* padding: 3%; */
+    height: 3em;
+    color: white;
+    margin-top: 1%;
+    font-size: 1em;
+    transition: all 0.3 ease;
+    -webkit-transititon: all 0.3 ease;
+    cursor: pointer;
+}
+
+.form-login button:hover,.form button:active,.form button:focus {
+    background: #43A047;
+}
+
+.form-login .message {
+    margin: 3% 0 0;
+    color: #B3B3B3;
+    font-size: 0.8em;
+}
+
+.form-login .message a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.register-form, .login-form {
+    margin: 10% 5%;
+}
+
+
+table.budget {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.table-budget-div {
+    width: 90%;
+    margin: auto;
+    overflow-x: auto;
+    max-width: 900px;
+}
+
+table.budget th {
+    background-color: white;
+    color: black;
+    min-width: 85px;
+    text-align: center;
+    padding: 2% 1px;
+}
+
+table.budget th:first-child{
+    min-width: 140px;
+}
+
+table.budget td:first-child:not(.spanned) {
+    border-right: 1px solid black;
+}
+
+table.budget tr:nth-child(even){background-color: white}
+table.budget tr:nth-child(odd){background-color: white}
+table.budget  td.spanned {
+    background-color: #43A047;
+    color: white;
+}
+
+details {
+    margin-bottom: 3%;
+}
+
+details > * {
+    margin-left: 3%;
+}
+
+.table-transactions, .table-plans {
+    margin-left: 3%;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    text-align: center;
+    z-index: 1;
+    padding-top: 10%; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+  }
+
+  .modal#addToGoalsModal {
+      display: none;
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 3%;
+    padding-bottom: 5%;
+    border: 1px solid #888;
+    width: 70%;
+}
+
+.modal-submit-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.close-modal, .close-modal-add {
+    color: #aaaaaa;
+    float: right;
+    font-size: 2em;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal, .close-modal-add :hover, :focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.edit-link {
+    margin-left: 4%;
+    font-size: 0.5em;
+    color: blue;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
+.modal-ul {
+    list-style: none;
+}
+
+.upload {
+    height: 1em;
+}
+
+/* footer {
+    bottom: 0;
+    margin-top: 150px;
+    width: 100%;
+    height: 80px;
+    box-shadow: 0 0 25px 0 black; 
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: white;
+}
+
+footer * {
+    text-align: center;
+    display: inline;
+} */
+
+.chart-container {
+    text-align: center;
+}
+
+.temp-chart {
+    width: 80%;
+    margin-bottom: 5%;
+}
+
+@media screen and (max-width: 900px) {
+    table {
+        table-layout: fixed;
+        min-width: 200px;
+    }
+
+    input {
+        background-color: rgba(255,255,255,0.8);
+    }
+
+    td, th {
+        word-wrap:break-word;
+    }
+
+    nav {
+        padding-bottom: 1%;
+    }
+
+    header {
+        height: auto;
+    }
+
+    header ul {
+        margin-right: 7%;
+        display: block;
+    }
+
+    header ul li a.first {
+        text-align: left;
+        width: 60px;
+    }
+
+    header ul li a:not(.first) {
+        display: none;
+    }
+
+    header ul li .icon {
+        float: right;
+        display: block;
+        background-color: transparent;
+        border: none;
+        margin-top: 3%;
+    }
+
+    header ul li .icon img {
+        height: 35px;
+    }
+
+    aside {
+        display: none;
+    }
+
+    nav {
+        margin-left: 5%;
+    }
+
+    .nav-wrapper.responsive ul li a {
+        display: block;
+        text-align: left;
+    }
+
+    .nav-wrapper.responsive ul li a.first {
+        color: black;
+        font-size: 1.1em;
+        width: 100%;
+    }
+
+    div#error-message {
+        margin-top: 45%;
+        margin-left: 5%;
+    }
+
+    .transactions-second-row {
+        display: grid;
+        grid-template-rows: 1fr;
+        margin-right: 5%;
+    }
+
+    .transactions-second-row > .dates-period {
+        display: grid;
+        grid-template-rows: 1fr;
+        margin-right: 5%;
+    }
+
+    .transactions-first-row.transactions {
+        margin-left: 2%;
+    }
+
+    .dates-period > * {
+        margin-top: 1%;
+    }
+
+    .date-transaction > .period-input {
+        background-color: rgba(255,255,255,0.8);;
+    }
+
+    .dates-period > .date-transaction {
+        display: block;
+    }
+
+    .date-transaction > .period-input {
+        flex: none;
+        width: 100%;
+        margin-left: 2%;
+    }
+
+    .period-input {
+        width: 30%;
+    }
+
+    .wrap-transaction {
+        margin-left: 10%;
+    }
+
+    header ul li .home {
+        margin-top: 0;
+    }
+
+    .nav-wrapper.responsive ul li .home {
+        display: none;
+    }
+
+    main {
+        grid-template-columns: 1fr;
+        justify-content: center;
+        margin-bottom: 8%;
+        margin-top: 35%;
+    }
+
+    main.login {
+        margin-top: 50%;
+    }
+
+    .float-right {
+        flex: none;
+        max-width: 100%;
+        margin-left: 0;
+    }
+
+    header li.nav-button { 
+        width: 95%;
+    }
+
+    .sign-in-button, .sign-out-button {
+        background-color: #4CAF50;
+        color: white;
+        width: 100%;
+        text-align: left;
+        margin: auto;
+        padding: auto;
+        border-radius: 0;
+    }
+
+    main.index {
+        display: grid;
+        grid-template-columns: 1fr;
+        margin-top: 30%;
+    }
+
+    main.add-transaction {
+        width: 90%;
+        margin-right: 5%;
+        margin-left: 1%;
+    }
+
+    input.date-input  {
+        min-width: 35%;
+    }
+
+    .select-tag {
+        width: 100%;
+        background-color: rgba(255,255,255,0.8);
+    }
+
+    .select-tag-transactions {
+        margin-left: 2%;
+    }
+
+    .select-type, .select-type-plans {
+        background-color: rgba(255,255,255,0.8);
+    }
+
+    .plans {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-top: 2%;
+    }
+
+    .plans * {
+        width: 100%;
+        background-color: white;
+    }
+
+    article.statistics-article {
+        grid-template-columns: 1fr;
+    }
+
+    article.table-article {
+        margin: auto 5% 5% 5%;
+        width: 90%;
+    }
+
+    section.statistics-section {
+        margin: auto 5% 5% 5%;
+    }
+
+    .modal-content {
+        margin-top: 30%;
+    }
+
+    main.transactions {
+        width: 90%;
+        margin-bottom: 5%;
+        padding: 2%;
+    }
+
+    td .in-header {
+        margin-left: auto;
+    }
+
+    .search-transaction {
+        width: 40%;
+    }
+
+    .transactions-links * {
+        margin: auto;
+    }
+
+    .buttons {
+        display: grid;
+    }
+
+    .transaction-submit {
+        width: auto;
+        margin-top: 2%;
+        margin-bottom: 2%;
+    }
+
+    div.main-item {
+        margin-left: 3%;
+    }
+
+    .goals-frame {
+        padding-bottom: 17%;
+    }
+    
+    .goals > li{
+        float: left;
+        margin: 3%;
+        margin-top: auto;
+        border:1px solid #000;
+        list-style:none;
+        padding:2px;
+        width:40%;
+    }
+
+    select {
+        background:none\9;
+        padding: 5px\9;
+    }
+
+    /* FOR TABLE */
+    table {
+		word-wrap:break-word;
+	}
+	table thead {
+		display:none
+	}
+	table td {
+		display:block;
+		float:left;/* ie9 and under hack */
+		width:100%;
+		clear:both;
+		padding:10px 5px;
+		-moz-box-sizing:border-box;
+		-webkit-box-sizing:border-box;
+        box-sizing:border-box;
+        word-wrap:break-word;
+    }
+    
+    table tr:nth-child(even){background-color: white}
+    table tr:nth-child(odd){background-color: gainsboro}
+
+
+	table tbody, table tr {
+		display:block
+	}
+	table td:before {
+		content:attr(data-th);
+		display:block;
+		font-weight:bold;
+		margin:0 0 2px;
+		color:green;
+	}
+	table tbody tr {
+        border: 1px solid black;
+        float:left;
+        width:100%;
+        margin-bottom:10px;
+    }
+    
+    table.budget tbody tr td:first-child {
+        text-align: center;
+    }
+
+    .login-page {
+        margin: auto;
+    }
+
+    .form-login {
+        width: 100%;
+    }
+}
