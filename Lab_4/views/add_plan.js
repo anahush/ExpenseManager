@@ -3,9 +3,15 @@ import DatabaseUtils from "../services/databaseUtils.js";
 import ShortStatisticsPartial from "./shortStatisticsPartial.js";
 
 let AddPlan = {
-    render: async (dataStatistics, customCategories) => {
+    render: async (dataStatistics, dataChange, customCategories, id, status) => {
         AddPlan.dataStatistics = dataStatistics;
         AddPlan.customCategories = customCategories;
+        AddPlan.dataChange = dataChange;
+        AddPlan.idChange = id;
+        AddPlan.status = status;
+
+        AddPlan.standartCategories = ["Food", "Transport", "Car", "Entertainment", "Clothes", "House", "Other"];
+
         return `
         <div class="site-content">
         ${AddPlan.renderAside()}
@@ -17,52 +23,31 @@ let AddPlan = {
                         <div class="wrap-input validate-input" data-validate="Description is required">
                             <label class="label-input" for="description-plan">Description</label>
                             <input class="input input-form" id="description-plan" type="text" name="description"
-                                placeholder="Enter description" required>
+                                placeholder="Enter description" value="${AddPlan.getEditField("description")}" required>
                             <span class="focus-input"></span>
                         </div>
                         <div class="wrap-input validate-input" data-validate="Amount is required">
                             <label class="label-input" for="amount-plan">Amount</label>
                             <input class="input input-form" id="amount-plan" type="number" name="amount"
-                                placeholder="Enter amount" required>
+                                placeholder="Enter amount" value="${AddPlan.getEditField("amount")}" required>
                             <span class="focus-input"></span>
                         </div>
                         <div class="wrap-input input-select">
                             <label class="label-input" for="type-plan">Type</label>
                             <div>
-                                <select class="select-transaction" id="type-plan" name="type">
-                                    <option>Income</option>
-                                    <option>Expense</option>
-                                </select>
+                                ${AddPlan.renderDefaultTypeSelect()}
                             </div>
                         </div>
                         <div class="wrap-input input-select">
                             <label class="label-input" for="currency-plan">Currency</label>
                             <div>
-                                <select class="select-transaction" id="currency-plan" name="currency">
-                                    <option>USD</option>
-                                    <option>EUR</option>
-                                    <option>BYN</option>
-                                    <option>RUB</option>
-                                </select>
+                                ${AddPlan.renderDefaultCurrencySelect()}
                             </div>
                         </div>
                         <div class="wrap-input input-select">
                             <label class="label-input" for="category-plan">Category</label>
                             <div>
-                                <select class="select-transaction" id="category-plan" name="category">
-                                    <optgroup label="Standart">
-                                        <option>Food</option>
-                                        <option>Transport</option>
-                                        <option>Car</option>
-                                        <option>Entertainment</option>
-                                        <option>Clothes</option>
-                                        <option>House</option>
-                                        <option>Other</option>
-                                    </optgroup>
-                                    <optgroup label="Custom">
-                                        ${AddPlan.renderCustomOptions(AddPlan.customCategories)}
-                                    </optgroup>
-                                </select>
+                                ${AddPlan.renderDefaultCategorySelect()}
                             </div>
                         </div>
                         <div class="wrap-input add-option" id="add-option-wrapper">
@@ -72,32 +57,25 @@ let AddPlan = {
                         </div>
                         <div class="wrap-input input-date">
                             <label class="label-input" for="date-plan">Date</label>
-                            <input class="input date-input" id="date-plan" type="date" name="date" required>
+                            <input class="input date-input" id="date-plan" type="date" 
+                            name="date" value="${AddPlan.getEditField("date")}" required>
                         </div>
                         <div class="wrap-input input-select">
                             <label class="label-input" for="repeat-plan">Repeat</label>
                             <div>
-                                <select class="select-transaction" id="repeat-plan" name="repeat">
-                                    <option>No repeat</option>
-                                    <option>Every day</option>
-                                    <option>Every month</option>
-                                    <option>Every year</option>
-                                </select>
+                                ${AddPlan.renderDefaultRepeatSelect()}
                             </div>
                         </div>
                         <div class="wrap-input input-select">
                             <label class="label-input" for="account-plan">Account</label>
                             <div>
-                                <select class="select-transaction" id="account-plan" name="account">
-                                    <option>Card</option>
-                                    <option>Cash</option>
-                                </select>
+                               ${AddPlan.renderDefaultAccountSelect()}
                             </div>
                         </div>
                         <div class="wrap-input">
                             <label class="label-input" for="place-plan">Place</label>
                             <input class="input input-form" id="place-plan" type="text" name="place"
-                                placeholder="Enter place">
+                                placeholder="Enter place" value="${AddPlan.getEditField("place")}">
                             <span class="focus-input"></span>
                         </div>
                         <div class="wrap-input">
@@ -128,17 +106,22 @@ let AddPlan = {
         let currentTime = DateTimeConvert.convert();
         let categorySelect = document.getElementById('category-plan');
 
-        let key = 0;
-        db.ref('plans/' + userID + "/").limitToLast(1).once("value").then((snapshot) => {
-            let val = snapshot.val();
-            if (val == null || typeof val == "undefined") {
-                return;
-            }
-            let lastKey = Number(Object.keys(val)[0]);
-            if (lastKey != null && typeof lastKey != "undefined" && lastKey >= 0) {
-                key = lastKey + 1;
-            }
-        })
+        let key;
+        if (AddPlan.status == "edit") {
+            key = AddPlan.idChange;
+        } else {
+            key = 0;
+            db.ref('plans/' + userID + "/").limitToLast(1).once("value").then((snapshot) => {
+                let val = snapshot.val();
+                if (val == null || typeof val == "undefined") {
+                    return;
+                }
+                let lastKey = Number(Object.keys(val)[0]);
+                if (lastKey != null && typeof lastKey != "undefined" && lastKey >= 0) {
+                    key = lastKey + 1;
+                }
+            })
+        }
 
         fileUpload.addEventListener('change', () => {
             let buttonFileInput = document.getElementById('button-input-file');
@@ -158,9 +141,14 @@ let AddPlan = {
             e.preventDefault();
             let files = fileUpload.files;
             if (files.length == 0) {
-                alert("Picture was not selected. Default picture will be used instead.");
-                let downloadURL = "https://www.shareicon.net/data/512x512/2015/11/20/675119_sign_512x512.png";
-                AddPlan.sendFormData(formPlan, downloadURL, userID, key);
+                if (AddPlan.status == "add") {
+                    alert("Picture was not selected. Default picture will be used instead.");
+                    let downloadURL = "https://www.shareicon.net/data/512x512/2015/11/20/675119_sign_512x512.png";
+                    AddPlan.sendFormData(formPlan, downloadURL, userID, key);
+                } else {
+                    alert("Picture was not changed.");
+                    AddPlan.sendFormData(formPlan, null, userID, key);
+                }
                 return false;
             }
 
@@ -186,14 +174,126 @@ let AddPlan = {
         });
     },
 
+    getEditField: (field) => {
+        if (AddPlan.status == "edit" && AddPlan.dataChange) {
+            return AddPlan.dataChange[field];
+        }
+        return "";
+    },
+
+    renderDefaultTypeSelect: () => {
+        if (AddPlan.dataChange) {
+            return `
+        <select class="select-transaction" id="type-plan" name="type">
+            <option ${AddPlan.selectedCompare(AddPlan.dataChange.type, "Income")}>Income</option>
+            <option ${AddPlan.selectedCompare(AddPlan.dataChange.type, "Expense")}>Expense</option>
+        </select>
+        `
+        } else {
+            return `
+            <select class="select-transaction" id="type-plan" name="type">
+            <option>Income</option>
+            <option>Expense</option>
+        </select>
+            `
+        }
+    },
+
+    renderDefaultCurrencySelect: () => {
+        if (AddPlan.dataChange) {
+            return `
+            <select class="select-transaction" id="currency-plan" name="currency">
+                <option ${AddPlan.selectedCompare(AddPlan.dataChange.currency, "USD")}>USD</option>
+                <option ${AddPlan.selectedCompare(AddPlan.dataChange.currency, "EUR")}>EUR</option>
+                <option ${AddPlan.selectedCompare(AddPlan.dataChange.currency, "BYN")}>BYN</option>
+                <option ${AddPlan.selectedCompare(AddPlan.dataChange.currency, "RUB")}>RUB</option>
+            </select>
+            `
+        } else {
+            return `
+            <select class="select-transaction" id="currency-plan" name="currency">
+                <option>USD</option>
+                <option>EUR</option>
+                <option>BYN</option>
+                <option>RUB</option>
+            </select>
+            `
+        }
+    },
+
+    renderDefaultCategorySelect: () => {
+        return `
+            <select class="select-transaction" id="category-plan" name="category">
+                <optgroup label="Standart">
+                    ${AddPlan.renderStandartOptions()}
+                </optgroup>
+                <optgroup label="Custom">
+                    ${AddPlan.renderCustomOptions(AddPlan.customCategories)}
+                </optgroup>
+            </select>
+            `
+    },
+
+    renderDefaultRepeatSelect: () => {
+        if (AddPlan.dataChange) {
+            return `
+            <select class="select-transaction" id="repeat-plan" name="repeat">
+                <option ${AddPlan.selectedCompare(AddPlan.dataChange.repeat, "No repeat")}>No repeat</option>
+                <option ${AddPlan.selectedCompare(AddPlan.dataChange.repeat, "Every day")}>Every day</option>
+                <option ${AddPlan.selectedCompare(AddPlan.dataChange.repeat, "Every month")}>Every month</option>
+                <option ${AddPlan.selectedCompare(AddPlan.dataChange.repeat, "Every year")}>Every year</option>
+            </select>
+            `
+        } else {
+            return `
+            <select class="select-transaction" id="repeat-plan" name="repeat">
+                <option>No repeat</option>
+                <option>Every day</option>
+                <option>Every month</option>
+                <option>Every year</option>
+            </select>
+            `
+        }
+    },
+
+    renderDefaultAccountSelect: () => {
+        if (AddPlan.dataChange) {
+            return `
+            <select class="select-transaction" id="account-plan" name="account">
+                <option ${AddPlan.selectedCompare(AddPlan.dataChange.account, "Card")}>Card</option>
+                <option ${AddPlan.selectedCompare(AddPlan.dataChange.account, "Cash")}>Cash</option>
+            </select>
+            `
+        } else {
+            return `
+            <select class="select-transaction" id="account-plan" name="account">
+                <option>Card</option>
+                <option>Cash</option>
+            </select>
+            `
+        }
+    },
+
+    selectedCompare: (opt1, opt2) => {
+        return opt1 == opt2 ? 'selected = "true"' : "";
+    },
+
     sendFormData: (formPlan, downloadURL, userID, key) => {
         let saveCategory = document.getElementById('save-option');
-        if (AddPlan.categoryOther && saveCategory.checked) {
-            DatabaseUtils.writePlanData(AddPlan.getFormData(formPlan), downloadURL, userID, key, true);
-        } else {
-            DatabaseUtils.writePlanData(AddPlan.getFormData(formPlan), downloadURL, userID, key, false);
-        }
 
+        if (AddPlan.status == "add") {
+            if (AddPlan.categoryOther && saveCategory.checked) {
+                DatabaseUtils.writePlanData(AddPlan.getFormData(formPlan), downloadURL, userID, key, true);
+            } else {
+                DatabaseUtils.writePlanData(AddPlan.getFormData(formPlan), downloadURL, userID, key, false);
+            }
+        } else {
+            if (AddPlan.categoryOther && saveCategory.checked) {
+                DatabaseUtils.editPlanData(AddPlan.getFormData(formPlan), downloadURL, userID, key, true);
+            } else {
+                DatabaseUtils.editPlanData(AddPlan.getFormData(formPlan), downloadURL, userID, key, false);
+            }
+        }
         window.location.hash = "#/plans";
     },
 
@@ -224,9 +324,35 @@ let AddPlan = {
             return;
         }
         let markup = ``;
-        options.forEach(category => {
-            markup += `<option>${category.name}</option>`
-        })
+        let optionsArray = [];
+        options.forEach(option => {
+            optionsArray.push(option.name);
+        });
+
+        if (AddPlan.status == "edit" && AddPlan.dataChange && optionsArray.includes(AddPlan.dataChange.category)) {
+            optionsArray.forEach(category => {
+                markup += `<option ${AddPlan.selectedCompare(AddPlan.dataChange.category, category)}>${category}</option>`
+            })
+        } else {
+            optionsArray.forEach(category => {
+                markup += `<option>${category}</option>`
+            });
+
+        }
+        return markup;
+    },
+
+    renderStandartOptions: () => {
+        let markup = ``;
+        if (AddPlan.dataChange) {
+            AddPlan.standartCategories.forEach(category => {
+                markup += `<option ${AddPlan.selectedCompare(AddPlan.dataChange.category, category)}>${category}</option> `
+            })
+        } else {
+            AddPlan.standartCategories.forEach(category => {
+                markup += `<option>${category}</option>`
+            })
+        }
         return markup;
     },
 

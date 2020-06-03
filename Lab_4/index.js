@@ -20,9 +20,9 @@ import Navbar from './views/navbar.js';
 const routes = {
     '/': MainPage,
     '/add_goal': AddGoal,
-    '/edit_goal/:id': EditGoal,
-    '/edit_plan/:id': EditPlan,
-    '/edit_transaction/:id': EditTransaction,
+    '/edit_goal/:id': AddGoal,
+    '/edit_plan/:id': AddPlan,
+    '/edit_transaction/:id': AddTransaction,
     '/add_plan': AddPlan,
     '/add_transaction': AddTransaction,
     '/goals': Goals,
@@ -44,12 +44,14 @@ const router = async () => {
     let request = Utils.parseRequestURL();
     let parsedURL = (request.resource ? '/' + request.resource : '/') + (request.id ? '/:id' : '');
     let page = null;
+    let edit = false;
 
 
     firebase.auth().onAuthStateChanged(async (user) => {
         if (user) {
             header.innerHTML = await Navbar.render();
             page = routes[parsedURL] ? routes[parsedURL] : Error404;
+            edit = parsedURL.search("edit") != -1;
             uid = user.uid;
         } else {
             header.innerHTML = await Navbar.renderOnlyLogin();
@@ -111,7 +113,85 @@ const router = async () => {
                 }
                 await page.afterRender();
             })
-        } else if (page == AddPlan || page == AddTransaction || page == AddGoal || page == Statistics) {
+        } else if (page == AddGoal) {
+            if (edit) {
+                let id = request.id.slice(1);
+                Promise.all([
+                    db.ref('transactions/' + uid).once('value'),
+                    db.ref('goals/' + uid + '/' + id).once('value'),
+                    db.ref('userCategories/' + uid).once('value')
+                ]).then(async (snapshots) => {
+                    let transactionsData = snapshots[0].val();
+                    let dataChange = snapshots[1].val();
+                    let categories = snapshots[2].val();
+                    transactionsData = transactionsData ? Object.values(transactionsData) : null;
+                    categories = categories ? Object.values(categories) : null;
+
+                    content.innerHTML = await page.render(transactionsData, dataChange, categories, id, 'edit');
+                    await page.afterRender();
+                })
+            } else {
+                Promise.all([
+                    db.ref('transactions/' + uid).once('value'),
+                    db.ref('userCategories/' + uid).once('value')
+                ]).then(async (snapshots) => {
+                    let transactionsData = snapshots[0].val();
+                    let categories = snapshots[1].val();
+                    transactionsData = transactionsData ? Object.values(transactionsData) : null;
+                    categories = categories ? Object.values(categories) : null;
+                    content.innerHTML = await page.render(transactionsData, null, categories, null, 'add');
+                    await page.afterRender();
+                })
+            }
+        } else if (page == AddPlan) {
+            if (edit) {
+                let id = request.id.slice(1);
+                Promise.all([
+                    db.ref('transactions/' + uid).once('value'),
+                    db.ref('plans/' + uid + '/' + id).once('value'),
+                    db.ref('userCategories/' + uid).once('value')
+                ]).then(async (snapshots) => {
+                    let transactionsData = snapshots[0].val();
+                    let dataChange = snapshots[1].val();
+                    let categories = snapshots[2].val();
+                    transactionsData = transactionsData ? Object.values(transactionsData) : null;
+                    categories = categories ? Object.values(categories) : null;
+
+                    content.innerHTML = await page.render(transactionsData, dataChange, categories, id, 'edit');
+                    await page.afterRender();
+                })
+            } else {
+                Promise.all([
+                    db.ref('transactions/' + uid).once('value'),
+                    db.ref('userCategories/' + uid).once('value')
+                ]).then(async (snapshots) => {
+                    let transactionsData = snapshots[0].val();
+                    let categories = snapshots[1].val();
+                    transactionsData = transactionsData ? Object.values(transactionsData) : null;
+                    categories = categories ? Object.values(categories) : null;
+                    content.innerHTML = await page.render(transactionsData, null, categories, null, 'add');
+                    await page.afterRender();
+                })
+            }
+        } else if (page == AddTransaction) {
+            Promise.all([
+                db.ref('transactions/' + uid).once('value'),
+                db.ref('userCategories/' + uid).once('value')
+            ]).then(async (snapshots) => {
+                let dataTransactions = snapshots[0].val();
+                let categories = snapshots[1].val();
+                categories = categories ? Object.values(categories) : null;
+
+                if (edit) {
+                    let id = request.id.slice(1);
+                    content.innerHTML = await page.render(Object.values(dataTransactions), dataTransactions[id], categories, id, "edit");
+                } else {
+                    dataTransactions = dataTransactions ? Object.values(dataTransactions) : null;
+                    content.innerHTML = await page.render(dataTransactions, null, categories, null, "add");
+                }
+                await page.afterRender();
+            })
+        } else if (page == Statistics) {
             Promise.all([
                 db.ref('transactions/' + uid).once('value'),
                 db.ref('userCategories/' + uid).once('value')
@@ -133,7 +213,7 @@ const router = async () => {
                 }
                 await page.afterRender();
             })
-        }else if (page == Transactions) {
+        } else if (page == Transactions) {
             db.ref('transactions/' + uid).once('value').then(async (snapshot) => {
                 let transactionsData = snapshot.val();
                 if (transactionsData) {
@@ -174,31 +254,31 @@ const router = async () => {
                 content.innerHTML = await page.render(transactionsData, goalsData, plansData);
                 await page.afterRender();
             });
-        } else if (page == EditGoal) {
-            let id = request.id.slice(1);
-            Promise.all([
-                db.ref('transactions/' + uid).once('value'),
-                db.ref('goals/' + uid + '/' + id).once('value')
-            ]).then(async (snapshots) => {
-                content.innerHTML = await page.render(Object.values(snapshots[0].val()), snapshots[1].val(), id);
-                await page.afterRender();
-            })
-        } else if (page == EditPlan) {
-            let id = request.id.slice(1);
-            Promise.all([
-                db.ref('transactions/' + uid).once('value'),
-                db.ref('plans/' + uid + '/' + id).once('value')
-            ]).then(async (snapshots) => {
-                content.innerHTML = await page.render(Object.values(snapshots[0].val()), snapshots[1].val(), id);
-                await page.afterRender();
-            })
-        } else if (page == EditTransaction) {
-            let id = request.id.slice(1);
-            db.ref('transactions/' + uid).once('value').then(async (snapshot) => {
-                let dataTransactions = snapshot.val();
-                content.innerHTML = await page.render(Object.values(dataTransactions), dataTransactions[id], id);
-                await page.afterRender();
-            })
+            // } else if (page == EditGoal) {
+            //     let id = request.id.slice(1);
+            //     Promise.all([
+            //         db.ref('transactions/' + uid).once('value'),
+            //         db.ref('goals/' + uid + '/' + id).once('value')
+            //     ]).then(async (snapshots) => {
+            //         content.innerHTML = await page.render(Object.values(snapshots[0].val()), snapshots[1].val(), id);
+            //         await page.afterRender();
+            //     })
+            // } else if (page == EditPlan) {
+            //     let id = request.id.slice(1);
+            //     Promise.all([
+            //         db.ref('transactions/' + uid).once('value'),
+            //         db.ref('plans/' + uid + '/' + id).once('value')
+            //     ]).then(async (snapshots) => {
+            //         content.innerHTML = await page.render(Object.values(snapshots[0].val()), snapshots[1].val(), id);
+            //         await page.afterRender();
+            //     })
+            // } else if (page == EditTransaction) {
+            //     let id = request.id.slice(1);
+            //     db.ref('transactions/' + uid).once('value').then(async (snapshot) => {
+            //         let dataTransactions = snapshot.val();
+            //         content.innerHTML = await page.render(Object.values(dataTransactions), dataTransactions[id], id);
+            //         await page.afterRender();
+            //     })
         } else {
             content.innerHTML = await page.render();
             await page.afterRender();

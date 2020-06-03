@@ -3,9 +3,15 @@ import DatabaseUtils from "../services/databaseUtils.js";
 import ShortStatisticsPartial from "./shortStatisticsPartial.js";
 
 let AddTransaction = {
-    render: async (dataStatistics, customCategories) => {
+    render: async (dataStatistics, dataChange, customCategories, id, status) => {
         AddTransaction.dataStatistics = dataStatistics;
         AddTransaction.customCategories = customCategories;
+        AddTransaction.dataChange = dataChange;
+        AddTransaction.idChange = id;
+        AddTransaction.status = status;
+
+        AddTransaction.standartCategories = ["Food", "Transport", "Car", "Entertainment", "Clothes", "House", "Other"];
+
         return `
         <div class="site-content">
         ${AddTransaction.renderAside()}
@@ -17,51 +23,30 @@ let AddTransaction = {
                         <div class="wrap-input validate-input" data-validate="Description is required">
                             <label class="label-input" for="description-transaction">Description</label>
                             <input class="input input-form" type="text" id="description-transaction" name="description"
-                                placeholder="Enter description" required>
+                                placeholder="Enter description" value="${AddTransaction.getEditField("description")}" required>
                             <span class="focus-input"></span>
                         </div>
                         <div class="wrap-input validate-input" data-validate="Amount is required">
                             <label class="label-input" for="amount-transaction">Amount</label>
                             <input class="input input-form" id="amount-transaction" type="number" name="amount"
-                                placeholder="Enter amount" required>
+                                placeholder="Enter amount" value="${AddTransaction.getEditField("amount")}" required>
                             <span class="focus-input"></span>
                         </div>
                         <div class="wrap-input input-select">
                             <label class="label-input" for="type-transaction">Type</label>
                             <div>
-                                <select class="select-transaction" id="type-transaction" name="type">
-                                    <option>Income</option>
-                                    <option>Expense</option>
-                                </select>
+                                ${AddTransaction.renderDefaultTypeSelect()}
                             </div>
                         </div>
                         <div class="wrap-input input-select">
                             <label class="label-input" for="currency-transaction">Currency</label>
                             <div>
-                                <select class="select-transaction" id="currency-transaction" name="currency">
-                                    <option>USD</option>
-                                    <option>EUR</option>
-                                    <option>BYN</option>
-                                    <option>RUB</option>
-                                </select>
+                                ${AddTransaction.renderDefaultCurrencySelect()}
                             </div>
                         </div>
                         <div class="wrap-input input-select">
                             <label class="label-input" for="category-transaction">Category</label>
-                            <select class="select-transaction" id="category-transaction" name="category">
-                                    <optgroup label="Standart">
-                                        <option>Food</option>
-                                        <option>Transport</option>
-                                        <option>Car</option>
-                                        <option>Entertainment</option>
-                                        <option>Clothes</option>
-                                        <option>House</option>
-                                        <option>Other</option>
-                                    </optgroup>
-                                    <optgroup label="Custom">
-                                        ${AddTransaction.renderCustomOptions(AddTransaction.customCategories)}
-                                    </optgroup>
-                                </select>
+                            ${AddTransaction.renderDefaultCategorySelect()}
                         </div>
                         <div class="wrap-input add-option" id="add-option-wrapper">
                             <label class="label-input" for="add-option">Add option</label>
@@ -70,21 +55,19 @@ let AddTransaction = {
                         </div>
                         <div class="wrap-input input-date">
                             <label class="label-input" for="date-transaction">Date</label>
-                            <input class="input date-input" id="date-transaction" type="date" name="date" required>
+                            <input class="input date-input" id="date-transaction" type="date"
+                            name="date" value="${AddTransaction.getEditField("date")}" required>
                         </div>
                         <div class="wrap-input input-select">
                             <label class="label-input" for="account-transaction">Account</label>
                             <div>
-                                <select class="select-transaction" id="account-transaction" name="account">
-                                    <option>Card</option>
-                                    <option>Cash</option>
-                                </select>
+                                ${AddTransaction.renderDefaultAccountSelect()}
                             </div>
                         </div>
                         <div class="wrap-input">
                             <label class="label-input" for="place-transaction">Place</label>
                             <input class="input input-form" id="place-transaction" type="text" name="place"
-                                placeholder="Enter place">
+                            placeholder="Enter place" value="${AddTransaction.getEditField("place")}">
                             <span class="focus-input"></span>
                         </div>
                         <div class="wrap-input">
@@ -115,17 +98,22 @@ let AddTransaction = {
         let currentTime = DateTimeConvert.convert();
         let categorySelect = document.getElementById('category-transaction');
 
-        let key = 0;
-        db.ref('transactions/' + userID + "/").limitToLast(1).once("value").then((snapshot) => {
-            let val = snapshot.val();
-            if (val == null || typeof val == "undefined") {
-                return;
-            }
-            let lastKey = Number(Object.keys(val)[0]);
-            if (lastKey != null && typeof lastKey != "undefined" && lastKey >= 0) {
-                key = lastKey + 1;
-            }
-        })
+        let key;
+        if (AddTransaction.status == "edit") {
+            key = AddTransaction.idChange;
+        } else {
+            key = 0;
+            db.ref('transactions/' + userID + "/").limitToLast(1).once("value").then((snapshot) => {
+                let val = snapshot.val();
+                if (val == null || typeof val == "undefined") {
+                    return;
+                }
+                let lastKey = Number(Object.keys(val)[0]);
+                if (lastKey != null && typeof lastKey != "undefined" && lastKey >= 0) {
+                    key = lastKey + 1;
+                }
+            })
+        }
 
         fileUpload.addEventListener('change', () => {
             let buttonFileInput = document.getElementById('button-input-file');
@@ -146,9 +134,14 @@ let AddTransaction = {
 
             let files = fileUpload.files;
             if (files.length == 0) {
-                alert("Picture was not selected. Default picture will be used instead.");
-                let downloadURL = "https://www.shareicon.net/data/512x512/2015/11/20/675119_sign_512x512.png";
-                AddTransaction.sendFormData(formTransaction, downloadURL, userID, key);
+                if (AddTransaction.status == "add") {
+                    alert("Picture was not selected. Default picture will be used instead.");
+                    let downloadURL = "https://www.shareicon.net/data/512x512/2015/11/20/675119_sign_512x512.png";
+                    AddTransaction.sendFormData(formTransaction, downloadURL, userID, key);
+                } else {
+                    alert("Picture was not changed");
+                    AddTransaction.sendFormData(formTransaction, null, userID, key);
+                }
                 return false;
             }
 
@@ -174,12 +167,125 @@ let AddTransaction = {
         })
     },
 
+    getEditField: (field) => {
+        if (AddTransaction.status == "edit" && AddTransaction.dataChange) {
+            return AddTransaction.dataChange[field];
+        }
+        return "";
+    },
+
+    renderDefaultTypeSelect: () => {
+        if (AddTransaction.dataChange) {
+            return `
+        <select class="select-transaction" id="type-transaction" name="type">
+            <option ${AddTransaction.selectedCompare(AddTransaction.dataChange.type, "Income")}>Income</option>
+            <option ${AddTransaction.selectedCompare(AddTransaction.dataChange.type, "Expense")}>Expense</option>
+        </select>
+        `
+        } else {
+            return `
+            <select class="select-transaction" id="type-transaction" name="type">
+            <option>Income</option>
+            <option>Expense</option>
+        </select>
+            `
+        }
+    },
+
+    renderDefaultCurrencySelect: () => {
+        if (AddTransaction.dataChange) {
+            return `
+            <select class="select-transaction" id="currency-transaction" name="currency">
+                <option ${AddTransaction.selectedCompare(AddTransaction.dataChange.currency, "USD")}>USD</option>
+                <option ${AddTransaction.selectedCompare(AddTransaction.dataChange.currency, "EUR")}>EUR</option>
+                <option ${AddTransaction.selectedCompare(AddTransaction.dataChange.currency, "BYN")}>BYN</option>
+                <option ${AddTransaction.selectedCompare(AddTransaction.dataChange.currency, "RUB")}>RUB</option>
+            </select>
+            `
+        } else {
+            return `
+            <select class="select-transaction" id="currency-transaction" name="currency">
+                <option>USD</option>
+                <option>EUR</option>
+                <option>BYN</option>
+                <option>RUB</option>
+            </select>
+            `
+        }
+    },
+
+    renderDefaultCategorySelect: () => {
+        return `
+            <select class="select-transaction" id="category-transaction" name="category">
+                <optgroup label="Standart">
+                    ${AddTransaction.renderStandartOptions()}
+                </optgroup>
+                <optgroup label="Custom">
+                    ${AddTransaction.renderCustomOptions(AddTransaction.customCategories)}
+                </optgroup>
+            </select>
+            `
+    },
+
+    renderDefaultRepeatSelect: () => {
+        if (AddTransaction.dataChange) {
+            return `
+            <select class="select-transaction" id="repeat-transaction" name="repeat">
+                <option ${AddTransaction.selectedCompare(AddTransaction.dataChange.repeat, "No repeat")}>No repeat</option>
+                <option ${AddTransaction.selectedCompare(AddTransaction.dataChange.repeat, "Every day")}>Every day</option>
+                <option ${AddTransaction.selectedCompare(AddTransaction.dataChange.repeat, "Every month")}>Every month</option>
+                <option ${AddTransaction.selectedCompare(AddTransaction.dataChange.repeat, "Every year")}>Every year</option>
+            </select>
+            `
+        } else {
+            return `
+            <select class="select-transaction" id="repeat-transaction" name="repeat">
+                <option>No repeat</option>
+                <option>Every day</option>
+                <option>Every month</option>
+                <option>Every year</option>
+            </select>
+            `
+        }
+    },
+
+    renderDefaultAccountSelect: () => {
+        if (AddTransaction.dataChange) {
+            return `
+            <select class="select-transaction" id="account-transaction" name="account">
+                <option ${AddTransaction.selectedCompare(AddTransaction.dataChange.account, "Card")}>Card</option>
+                <option ${AddTransaction.selectedCompare(AddTransaction.dataChange.account, "Cash")}>Cash</option>
+            </select>
+            `
+        } else {
+            return `
+            <select class="select-transaction" id="account-transaction" name="account">
+                <option>Card</option>
+                <option>Cash</option>
+            </select>
+            `
+        }
+    },
+
+    selectedCompare: (opt1, opt2) => {
+        return opt1 == opt2 ? 'selected = "true"' : "";
+    },
+
     sendFormData: (formTransaction, downloadURL, userID, key) => {
         let saveCategory = document.getElementById('save-option');
-        if (AddTransaction.categoryOther && saveCategory.checked) {
-            DatabaseUtils.writeTransactionData(AddTransaction.getFormData(formTransaction), downloadURL, userID, key, true);
+
+        if (AddTransaction.status == "add") {
+            if (AddTransaction.categoryOther && saveCategory.checked) {
+                DatabaseUtils.writeTransactionData(AddTransaction.getFormData(formTransaction), downloadURL, userID, key, true);
+            } else {
+                DatabaseUtils.writeTransactionData(AddTransaction.getFormData(formTransaction), downloadURL, userID, key, false);
+            }
         } else {
-            DatabaseUtils.writeTransactionData(AddTransaction.getFormData(formTransaction), downloadURL, userID, key, false);
+            if (AddTransaction.categoryOther && saveCategory.checked) {
+                DatabaseUtils.editTransactionData(AddTransaction.getFormData(formTransaction), downloadURL, userID, key, true);
+            } else {
+                DatabaseUtils.editTransactionData(AddTransaction.getFormData(formTransaction), downloadURL, userID, key, false);
+            }
         }
         window.location.hash = "#/transactions";
     },
@@ -210,9 +316,35 @@ let AddTransaction = {
             return;
         }
         let markup = ``;
-        options.forEach(category => {
-            markup += `<option>${category.name}</option>`
-        })
+        let optionsArray = [];
+        options.forEach(option => {
+            optionsArray.push(option.name);
+        });
+
+        if (AddTransaction.status == "edit" && AddTransaction.dataChange && optionsArray.includes(AddTransaction.dataChange.category)) {
+            optionsArray.forEach(category => {
+                markup += `<option ${AddTransaction.selectedCompare(AddTransaction.dataChange.category, category)}>${category}</option>`
+            })
+        } else {
+            optionsArray.forEach(category => {
+                markup += `<option>${category}</option>`
+            });
+
+        }
+        return markup;
+    },
+
+    renderStandartOptions: () => {
+        let markup = ``;
+        if (AddTransaction.dataChange) {
+            AddTransaction.standartCategories.forEach(category => {
+                markup += `<option ${AddTransaction.selectedCompare(AddTransaction.dataChange.category, category)}>${category}</option> `
+            })
+        } else {
+            AddTransaction.standartCategories.forEach(category => {
+                markup += `<option>${category}</option>`
+            })
+        }
         return markup;
     },
 

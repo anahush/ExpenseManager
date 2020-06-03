@@ -1,6 +1,16 @@
 import DateTimeConvert from "../services/dateTimeConvert.js";
 
 const DatabaseUtils = {
+    saveCategory: (userID, category, otherCategorySelected) => {
+        if (otherCategorySelected) {
+            let currentTime = DateTimeConvert.convert();
+            let categoryRef = db.ref("userCategories/" + userID);
+            categoryRef.child(currentTime).set({
+                name: category
+            })
+        }
+    },
+
     writeGoalData: (fields, downloadLink, userID, key, otherCategorySelected) => {
         let goalRef = db.ref("goals/" + userID);
         let currentTime = DateTimeConvert.convert();
@@ -14,18 +24,13 @@ const DatabaseUtils = {
             contributed: "0",
             imageUrl: downloadLink
         }).then(() => {
-            if (otherCategorySelected) {
-                let categoryRef = db.ref("userCategories/" + userID);
-                categoryRef.child(currentTime).set({
-                    name: fields.category
-                })
-            }
+            DatabaseUtils.saveCategory(userID, fields.category, otherCategorySelected);
         }).catch(e => {
             alert(e.message);
         });
     },
 
-    editGoalData: (fields, downloadLink, userID, key) => {
+    editGoalData: (fields, downloadLink, userID, key, otherCategorySelected) => {
         let goalRef = db.ref("goals/" + userID);
         let updateData;
         if (downloadLink) {
@@ -48,14 +53,15 @@ const DatabaseUtils = {
                 due: fields.due
             };
         }
-        goalRef.child(key).update(updateData).catch(e => {
+        goalRef.child(key).update(updateData).then(() => {
+            DatabaseUtils.saveCategory(userID, fields.category, otherCategorySelected);
+        }).catch(e => {
             alert(e.message);
         });
     },
 
     addRemoveData: (i, amountNew, previousContributed, userID) => {
         let goalRef = db.ref("goals/" + userID);
-
         let updateData = { contributed: Number(previousContributed) + Number(amountNew) }
 
         goalRef.child(i).update(updateData).catch(e => {
@@ -70,7 +76,6 @@ const DatabaseUtils = {
 
     writePlanData: (fields, downloadLink, userID, key, otherCategorySelected) => {
         let planRef = db.ref("plans/" + userID);
-        let currentTime = DateTimeConvert.convert();
         planRef.child(key).set({
             description: fields.description,
             amount: fields.amount,
@@ -83,18 +88,13 @@ const DatabaseUtils = {
             place: fields.place,
             imageUrl: downloadLink
         }).then(() => {
-            if (otherCategorySelected) {
-                let categoryRef = db.ref("userCategories/" + userID);
-                categoryRef.child(currentTime).set({
-                    name: fields.category
-                })
-            }
+            DatabaseUtils.saveCategory(userID, fields.category, otherCategorySelected);
         }).catch(e => {
             alert(e.message);
         });
     },
 
-    editPlanData: (fields, downloadLink, userID, key) => {
+    editPlanData: (fields, downloadLink, userID, key, otherCategorySelected) => {
         let planRef = db.ref("plans/" + userID);
         let updateData;
         if (downloadLink) {
@@ -123,7 +123,9 @@ const DatabaseUtils = {
                 place: fields.place,
             };
         }
-        planRef.child(key).update(updateData).catch(e => {
+        planRef.child(key).update(updateData).then(() => {
+            DatabaseUtils.saveCategory(userID, fields.category, otherCategorySelected);
+        }).catch(e => {
             alert(e.message);
         });
     },
@@ -135,7 +137,6 @@ const DatabaseUtils = {
 
     writeTransactionData: (fields, downloadLink, userID, key, otherCategorySelected) => {
         let transactionRef = db.ref("transactions/" + userID);
-        let currentTime = DateTimeConvert.convert();
         transactionRef.child(key).set({
             description: fields.description,
             amount: fields.amount,
@@ -147,18 +148,13 @@ const DatabaseUtils = {
             place: fields.place,
             imageUrl: downloadLink 
         }).then(() => {
-            if (otherCategorySelected) {
-                let categoryRef = db.ref("userCategories/" + userID);
-                categoryRef.child(currentTime).set({
-                    name: fields.category
-                })
-            }
+            DatabaseUtils.saveCategory(userID, fields.category, otherCategorySelected);
         }).catch(e => {
             alert(e.message);
         })
     },
 
-    editTransactionData: (fields, downloadLink, userID, key) => {
+    editTransactionData: (fields, downloadLink, userID, key, otherCategorySelected) => {
         let transactionRef = db.ref("transactions/" + userID);
         let updateData;
         if (downloadLink) {
@@ -185,8 +181,9 @@ const DatabaseUtils = {
                 place: fields.place,
             }
         }
-
-        planRef.child(key).update(updateData).catch(e => {
+        transactionRef.child(key).update(updateData).then(() => {
+            DatabaseUtils.saveCategory(userID, fields.category, otherCategorySelected);
+        }).catch(e => {
             alert(e.message);
         });
     },
