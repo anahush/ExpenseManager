@@ -1,13 +1,11 @@
 function hamburgerOpenClose() {
-    var x = document.getElementById("myTopnav");
-    if (x.className === "nav-wrapper") {
-        x.className += " responsive";
-    } else {
-        x.className = "nav-wrapper";
+    var topNav = document.getElementById("myTopnav");
+    if (topNav) {
+        topNav.classList.toggle('responsive');
     }
 }
 
 function hamburgerOnlyClose() {
-    var x = document.getElementById("myTopnav");
-    x.className = "nav-wrapper";
+    var topNav = document.getElementById("myTopnav");
+    topNav.className = "nav-wrapper";
 }
