@@ -3,8 +3,9 @@ import DatabaseUtils from "../services/databaseUtils.js";
 import ShortStatisticsPartial from "./shortStatisticsPartial.js";
 
 let AddPlan = {
-    render: async (dataStatistics) => {
+    render: async (dataStatistics, customCategories) => {
         AddPlan.dataStatistics = dataStatistics;
+        AddPlan.customCategories = customCategories;
         return `
         <div class="site-content">
         ${AddPlan.renderAside()}
@@ -49,14 +50,25 @@ let AddPlan = {
                             <label class="label-input" for="category-plan">Category</label>
                             <div>
                                 <select class="select-transaction" id="category-plan" name="category">
-                                    <option>Food</option>
-                                    <option>Transport</option>
-                                    <option>Car</option>
-                                    <option>Entertainment</option>
-                                    <option>Clothes</option>
-                                    <option>House</option>
+                                    <optgroup label="Standart">
+                                        <option>Food</option>
+                                        <option>Transport</option>
+                                        <option>Car</option>
+                                        <option>Entertainment</option>
+                                        <option>Clothes</option>
+                                        <option>House</option>
+                                        <option>Other</option>
+                                    </optgroup>
+                                    <optgroup label="Custom">
+                                        ${AddPlan.renderCustomOptions(AddPlan.customCategories)}
+                                    </optgroup>
                                 </select>
                             </div>
+                        </div>
+                        <div class="wrap-input add-option" id="add-option-wrapper">
+                            <label class="label-input" for="add-option">Add option</label>
+                            <input class="input input-form" id="add-option" type="text" placeholder="Input option name">
+                            <Br><input id="save-option" type="checkbox">Save option<Br>
                         </div>
                         <div class="wrap-input input-date">
                             <label class="label-input" for="date-plan">Date</label>
@@ -114,6 +126,7 @@ let AddPlan = {
         let userID = auth.currentUser.uid;
         let fileUpload = document.getElementById("image-plan");
         let currentTime = DateTimeConvert.convert();
+        let categorySelect = document.getElementById('category-plan');
 
         let key = 0;
         db.ref('plans/' + userID + "/").limitToLast(1).once("value").then((snapshot) => {
@@ -160,25 +173,61 @@ let AddPlan = {
                 })
             })
         });
+
+        categorySelect.addEventListener('change', e => {
+            let categoryWrapper = document.getElementById('add-option-wrapper');
+            if (e.target.value == "Other") {
+                categoryWrapper.style.display = "block";
+                AddPlan.categoryOther = true;
+            } else {
+                categoryWrapper.style.display = "none";
+                AddPlan.categoryOther = false;
+            }
+        });
     },
 
     sendFormData: (formPlan, downloadURL, userID, key) => {
-        DatabaseUtils.writePlanData(AddPlan.getFormData(formPlan), downloadURL, userID, key);
+        let saveCategory = document.getElementById('save-option');
+        if (AddPlan.categoryOther && saveCategory.checked) {
+            DatabaseUtils.writePlanData(AddPlan.getFormData(formPlan), downloadURL, userID, key, true);
+        } else {
+            DatabaseUtils.writePlanData(AddPlan.getFormData(formPlan), downloadURL, userID, key, false);
+        }
+
         window.location.hash = "#/plans";
     },
 
     getFormData: (formPlan) => {
+        let categorySelected;
+        if (AddPlan.categoryOther) {
+            let value = formPlan['add-option'].value;
+            categorySelected = value == "" ? "Other" : value;
+        } else {
+            categorySelected = formPlan['category-plan'].value;
+        }
+
         return {
             description: formPlan['description-plan'].value,
             amount: formPlan['amount-plan'].value,
             type: formPlan['type-plan'].value,
             currency: formPlan['currency-plan'].value,
-            category: formPlan['category-plan'].value,
+            category: categorySelected,
             date: formPlan['date-plan'].value,
             repeat: formPlan['repeat-plan'].value,
             account: formPlan['account-plan'].value,
             place: formPlan['place-plan'].value
         }
+    },
+
+    renderCustomOptions: (options) => {
+        if (options == null) {
+            return;
+        }
+        let markup = ``;
+        options.forEach(category => {
+            markup += `<option>${category.name}</option>`
+        })
+        return markup;
     },
 
     renderAside: () => {

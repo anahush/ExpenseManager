@@ -112,6 +112,18 @@ const router = async () => {
                 await page.afterRender();
             })
         } else if (page == AddPlan || page == AddTransaction || page == AddGoal || page == Statistics) {
+            Promise.all([
+                db.ref('transactions/' + uid).once('value'),
+                db.ref('userCategories/' + uid).once('value')
+            ]).then(async (snapshots) => {
+                let transactionsData = snapshots[0].val();
+                let categories = snapshots[1].val();
+                transactionsData = transactionsData ? Object.values(transactionsData) : null;
+                categories = categories ? Object.values(categories) : null;
+                content.innerHTML = await page.render(transactionsData, categories);
+                await page.afterRender();
+            })
+        } else if (page == Statistics) {
             db.ref('transactions/' + uid).once('value').then(async (snapshot) => {
                 let transactionsData = snapshot.val();
                 if (transactionsData) {
@@ -121,7 +133,7 @@ const router = async () => {
                 }
                 await page.afterRender();
             })
-        } else if (page == Transactions) {
+        }else if (page == Transactions) {
             db.ref('transactions/' + uid).once('value').then(async (snapshot) => {
                 let transactionsData = snapshot.val();
                 if (transactionsData) {

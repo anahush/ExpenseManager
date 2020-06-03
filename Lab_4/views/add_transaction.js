@@ -3,8 +3,9 @@ import DatabaseUtils from "../services/databaseUtils.js";
 import ShortStatisticsPartial from "./shortStatisticsPartial.js";
 
 let AddTransaction = {
-    render: async (dataStatistics) => {
+    render: async (dataStatistics, customCategories) => {
         AddTransaction.dataStatistics = dataStatistics;
+        AddTransaction.customCategories = customCategories;
         return `
         <div class="site-content">
         ${AddTransaction.renderAside()}
@@ -47,16 +48,25 @@ let AddTransaction = {
                         </div>
                         <div class="wrap-input input-select">
                             <label class="label-input" for="category-transaction">Category</label>
-                            <div>
-                                <select class="select-transaction" id="category-transaction" name="category">
-                                    <option>Food</option>
-                                    <option>Transport</option>
-                                    <option>Car</option>
-                                    <option>Entertainment</option>
-                                    <option>Clothes</option>
-                                    <option>House</option>
+                            <select class="select-transaction" id="category-transaction" name="category">
+                                    <optgroup label="Standart">
+                                        <option>Food</option>
+                                        <option>Transport</option>
+                                        <option>Car</option>
+                                        <option>Entertainment</option>
+                                        <option>Clothes</option>
+                                        <option>House</option>
+                                        <option>Other</option>
+                                    </optgroup>
+                                    <optgroup label="Custom">
+                                        ${AddTransaction.renderCustomOptions(AddTransaction.customCategories)}
+                                    </optgroup>
                                 </select>
-                            </div>
+                        </div>
+                        <div class="wrap-input add-option" id="add-option-wrapper">
+                            <label class="label-input" for="add-option">Add option</label>
+                            <input class="input input-form" id="add-option" type="text" placeholder="Input option name">
+                            <Br><input id="save-option" type="checkbox">Save option<Br>
                         </div>
                         <div class="wrap-input input-date">
                             <label class="label-input" for="date-transaction">Date</label>
@@ -103,6 +113,7 @@ let AddTransaction = {
         let userID = auth.currentUser.uid;
         let fileUpload = document.getElementById("image-transaction");
         let currentTime = DateTimeConvert.convert();
+        let categorySelect = document.getElementById('category-transaction');
 
         let key = 0;
         db.ref('transactions/' + userID + "/").limitToLast(1).once("value").then((snapshot) => {
@@ -150,24 +161,59 @@ let AddTransaction = {
                 })
             })
         });
+
+        categorySelect.addEventListener('change', e => {
+            let categoryWrapper = document.getElementById('add-option-wrapper');
+            if (e.target.value == "Other") {
+                categoryWrapper.style.display = "block";
+                AddTransaction.categoryOther = true;
+            } else {
+                categoryWrapper.style.display = "none";
+                AddTransaction.categoryOther = false;
+            }
+        })
     },
 
     sendFormData: (formTransaction, downloadURL, userID, key) => {
-        DatabaseUtils.writeTransactionData(AddTransaction.getFormData(formTransaction), downloadURL, userID, key);
+        let saveCategory = document.getElementById('save-option');
+        if (AddTransaction.categoryOther && saveCategory.checked) {
+            DatabaseUtils.writeTransactionData(AddTransaction.getFormData(formTransaction), downloadURL, userID, key, true);
+        } else {
+            DatabaseUtils.writeTransactionData(AddTransaction.getFormData(formTransaction), downloadURL, userID, key, false);
+        }
         window.location.hash = "#/transactions";
     },
 
     getFormData: (formTransaction) => {
+        let categorySelected;
+        if (AddTransaction.categoryOther) {
+            let value = formTransaction['add-option'].value;
+            categorySelected = value == "" ? "Other" : value;
+        } else {
+            categorySelected = formTransaction['category-transaction'].value;
+        }
+
         return {
             description: formTransaction['description-transaction'].value,
             amount: formTransaction['amount-transaction'].value,
             type: formTransaction['type-transaction'].value,
             currency: formTransaction['currency-transaction'].value,
-            category: formTransaction['category-transaction'].value,
+            category: categorySelected,
             date: formTransaction['date-transaction'].value,
             account: formTransaction['account-transaction'].value,
             place: formTransaction['place-transaction'].value
         }
+    },
+
+    renderCustomOptions: (options) => {
+        if (options == null) {
+            return;
+        }
+        let markup = ``;
+        options.forEach(category => {
+            markup += `<option>${category.name}</option>`
+        })
+        return markup;
     },
 
     renderAside: () => {

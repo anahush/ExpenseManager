@@ -4,8 +4,9 @@ import ShortStatisticsPartial from "./shortStatisticsPartial.js";
 import CurrencyUtils from "../services/currencyUtils.js";
 
 let AddGoal = {
-    render: async (dataStatistics) => {
+    render: async (dataStatistics, customCategories) => {
         AddGoal.dataStatistics = dataStatistics;
+        AddGoal.customCategories = customCategories;
         return `
         <div class="site-content">
         ${AddGoal.renderAside()}
@@ -50,14 +51,25 @@ let AddGoal = {
                             <label class="label-input" for="category-goal">Category</label>
                             <div>
                                 <select class="select-transaction" id="category-goal" name="category">
-                                    <option>Food</option>
-                                    <option>Transport</option>
-                                    <option>Car</option>
-                                    <option>Entertainment</option>
-                                    <option>Clothes</option>
-                                    <option>House</option>
+                                    <optgroup label="Standart">
+                                        <option>Food</option>
+                                        <option>Transport</option>
+                                        <option>Car</option>
+                                        <option>Entertainment</option>
+                                        <option>Clothes</option>
+                                        <option>House</option>
+                                        <option>Other</option>
+                                    </optgroup>
+                                    <optgroup label="Custom">
+                                        ${AddGoal.renderCustomOptions(AddGoal.customCategories)}
+                                    </optgroup>
                                 </select>
                             </div>
+                        </div>
+                        <div class="wrap-input add-option" id="add-option-wrapper">
+                            <label class="label-input" for="add-option">Add option</label>
+                            <input class="input input-form" id="add-option" type="text" placeholder="Input option name">
+                            <Br><input id="save-option" type="checkbox">Save option<Br>
                         </div>
                         <div class="wrap-input input-date">
                             <label class="label-input" for="due-goal">Due</label>
@@ -89,6 +101,7 @@ let AddGoal = {
         let userID = auth.currentUser.uid;
         let fileUpload = document.getElementById("image-goal");
         let currentTime = DateTimeConvert.convert();
+        let categorySelect = document.getElementById('category-goal');
 
         let key = 0;
         db.ref('goals/' + userID + "/").limitToLast(1).once("value").then((snapshot) => {
@@ -136,23 +149,58 @@ let AddGoal = {
                 })
             })
         })
+
+        categorySelect.addEventListener('change', e => {
+            let categoryWrapper = document.getElementById('add-option-wrapper');
+            if (e.target.value == "Other") {
+                categoryWrapper.style.display = "block";
+                AddGoal.categoryOther = true;
+            } else {
+                categoryWrapper.style.display = "none";
+                AddGoal.categoryOther = false;
+            }
+        });
     },
 
     sendFormData: (formGoal, downloadURL, userID, key) => {
-        DatabaseUtils.writeGoalData(AddGoal.getFormData(formGoal), downloadURL, userID, key);
+        let saveCategory = document.getElementById('save-option');
+        if (AddGoal.categoryOther && saveCategory.checked) {
+            DatabaseUtils.writeGoalData(AddGoal.getFormData(formGoal), downloadURL, userID, key, true);
+        } else {
+            DatabaseUtils.writeGoalData(AddGoal.getFormData(formGoal), downloadURL, userID, key, false);
+        }
         window.location.hash = "#/goals";
     },
 
     getFormData: (formGoal) => {
+        let categorySelected;
+        if (AddGoal.categoryOther) {
+            let value = formGoal['add-option'].value;
+            categorySelected = value == "" ? "Other" : value;
+        } else {
+            categorySelected = formGoal['category-goal'].value;
+        }
+
         return {
             description: formGoal['description-goal'].value,
             amount: formGoal['amount-goal'].value,
             contributed: '0',
             type: formGoal['type-goal'].value,
             currency: formGoal['currency-goal'].value,
-            category: formGoal['category-goal'].value,
+            category: categorySelected,
             due: formGoal['due-goal'].value,
         }
+    },
+
+    renderCustomOptions: (options) => {
+        if (options == null) {
+            return;
+        }
+        let markup = ``;
+        options.forEach(category => {
+            markup += `<option>${category.name}</option>`
+        })
+        return markup;
     },
 
     renderAside: () => {

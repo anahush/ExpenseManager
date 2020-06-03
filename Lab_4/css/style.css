@@ -249,6 +249,10 @@ main.transactions {
     text-align: left;
 }
 
+div.add-option {
+    display: none;
+}
+
 .label-input {
     font-size: 0.9em;
     color: #666666;
