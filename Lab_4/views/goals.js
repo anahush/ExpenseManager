@@ -3,9 +3,13 @@ import DatabaseUtils from '../services/databaseUtils.js';
 import CurrencyUtils from '../services/currencyUtils.js';
 
 let Goals = {
-    render: async (dataGoals, dataStatistics) => {
+    render: async (dataGoals, dataStatistics, customCategories) => {
         Goals.data = dataGoals;
         Goals.dataStatistics = dataStatistics;
+        Goals.customCategories = customCategories;
+
+        Goals.standartCategories = ["Food", "Transport", "Car", "Entertainment", "Clothes", "House", "Other"];
+
         return `
         <div class="site-content">
         ${Goals.renderAside()}
@@ -38,16 +42,7 @@ let Goals = {
                             <option value="Expense">Expense</option>
                             <option value="All">All</option>
                         </select>
-                        <select class="select-tag select-tag-plans" id="goals-select-category-filter">
-                            <option value="hid" selected disabled hidden>Choose category</option>
-                            <option value="Food">Food</option>
-                            <option value="Transport">Transport</option>
-                            <option value="Car">Car</option>
-                            <option value="Entertainment">Entertainment</option>
-                            <option value="Clothes">Clothes</option>
-                            <option value="House">House</option>
-                            <option value="All">All</option>
-                        </select>
+                        ${Goals.renderSelectCategory()}
                     </div>
                 </div>
             </details>
@@ -155,6 +150,37 @@ let Goals = {
 
         Goals.replaceTable(Goals.data);
         Goals.setTableEventListeners(Goals.data);
+    },
+
+    renderSelectCategory: () => {
+        return `
+        <select class="select-tag select-tag-plans" id="goals-select-category-filter">
+            <option value="hid" selected disabled hidden>Choose category</option>
+            <optgroup label="Standart">
+                ${Goals.renderStandartOptions()}
+                <option value="All">All</option>
+            </optgroup>
+            <optgroup label="Custom">
+                ${Goals.renderCustomOptions(Goals.customCategories)}
+            </optgroup>
+        </select>
+        `
+    },
+
+    renderStandartOptions: () => {
+        let markup = ``;
+        Goals.standartCategories.forEach(category => {
+            markup += `<option>${category}</option>`
+        })
+        return markup;
+    },
+
+    renderCustomOptions: () => {
+        let markup = ``;
+        Goals.customCategories.forEach(category => {
+            markup += `<option>${category.name}</option>`
+        });
+        return markup;
     },
 
     replaceTable: (data) => {
@@ -278,7 +304,7 @@ let Goals = {
             DatabaseUtils.deleteGoal(i, uid);
             let modalWindow = document.getElementById('transactionModal');
             modalWindow.style.display = "none";
-    
+
             Goals.rerenderTableFromDatabase(uid);
         }
     },

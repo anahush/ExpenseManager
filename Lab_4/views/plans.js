@@ -3,9 +3,11 @@ import DatabaseUtils from '../services/databaseUtils.js';
 import CurrencyUtils from '../services/currencyUtils.js';
 
 let Plans = {
-    render: async (dataPlans, dataStatistics) => {
+    render: async (dataPlans, dataStatistics, customCategories) => {
         Plans.data = dataPlans;
         Plans.dataStatistics = dataStatistics;
+        Plans.customCategories = customCategories;
+        Plans.standartCategories = ["Food", "Transport", "Car", "Entertainment", "Clothes", "House", "Other"];
         return `
         <div class="site-content">
         ${Plans.renderAside()}
@@ -37,15 +39,7 @@ let Plans = {
                             <option>Income</option>
                             <option>Expense</option>
                         </select>
-                        <select class="select-tag select-tag-plans" id="plans-select-category-filter">
-                            <option value="hid" selected disabled hidden>Choose category</option>
-                            <option>Food</option>
-                            <option>Transport</option>
-                            <option>Car</option>
-                            <option>Entertainment</option>
-                            <option>Clothes</option>
-                            <option>House</option>
-                        </select>
+                        ${Plans.renderSelectCategory()}
                     </div>
                 </div>
             </details>
@@ -133,6 +127,37 @@ let Plans = {
 
         Plans.replaceTable(Plans.data);
         Plans.setTableEventListeners(Plans.data);
+    },
+
+    renderSelectCategory: () => {
+        return `
+        <select class="select-tag select-tag-plans" id="plans-select-category-filter">
+            <option value="hid" selected disabled hidden>Choose category</option>
+            <optgroup label="Standart">
+                ${Plans.renderStandartOptions()}
+                <option value="All">All</option>
+            </optgroup>
+            <optgroup label="Custom">
+                ${Plans.renderCustomOptions(Plans.customCategories)}
+            </optgroup>
+        </select>
+        `
+    },
+
+    renderStandartOptions: () => {
+        let markup = ``;
+        Plans.standartCategories.forEach(category => {
+            markup += `<option>${category}</option>`
+        })
+        return markup;
+    },
+
+    renderCustomOptions: () => {
+        let markup = ``;
+        Plans.customCategories.forEach(category => {
+            markup += `<option>${category.name}</option>`
+        });
+        return markup;
     },
 
     replaceTable: (data) => {

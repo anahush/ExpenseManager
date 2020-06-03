@@ -4,8 +4,10 @@ import CurrencyUtils from "../services/currencyUtils.js";
 
 
 let Transactions = {
-    render: async (data) => {
+    render: async (data, customCategories) => {
         Transactions.data = data;
+        Transactions.customCategories = customCategories;
+        Transactions.standartCategories = ["Food", "Transport", "Car", "Entertainment", "Clothes", "House", "Other"];
         return `
         <div class="site-content">
         ${Transactions.renderAside()}
@@ -44,15 +46,7 @@ let Transactions = {
                                     name="date_to">
                             </div>
                         </div>
-                        <select class="select-tag select-tag-transactions" id="transactions-select-category-filter">
-                            <option value="hid" selected disabled hidden>Choose category</option>
-                            <option>Food</option>
-                            <option>Transport</option>
-                            <option>Car</option>
-                            <option>Entertainment</option>
-                            <option>Clothes</option>
-                            <option>House</option>
-                        </select>
+                        ${Transactions.renderSelectCategory()}
                     </div>
                 </div>
             </details>
@@ -144,6 +138,37 @@ let Transactions = {
 
         Transactions.replaceTable(Transactions.data);
         Transactions.setTableEventListeners(Transactions.data);
+    },
+
+    renderSelectCategory: () => {
+        return `
+        <select class="select-tag select-tag-transactions" id="transactions-select-category-filter">
+            <option value="hid" selected disabled hidden>Choose category</option>
+            <optgroup label="Standart">
+                ${Transactions.renderStandartOptions()}
+                <option value="All">All</option>
+            </optgroup>
+            <optgroup label="Custom">
+                ${Transactions.renderCustomOptions(Transactions.customCategories)}
+            </optgroup>
+        </select>
+        `
+    },
+
+    renderStandartOptions: () => {
+        let markup = ``;
+        Transactions.standartCategories.forEach(category => {
+            markup += `<option>${category}</option>`
+        })
+        return markup;
+    },
+
+    renderCustomOptions: () => {
+        let markup = ``;
+        Transactions.customCategories.forEach(category => {
+            markup += `<option>${category.name}</option>`
+        });
+        return markup;
     },
 
     replaceTable: (data) => {

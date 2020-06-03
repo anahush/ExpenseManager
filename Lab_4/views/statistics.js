@@ -2,8 +2,11 @@ import ShortStatisticsPartial from "./shortStatisticsPartial.js";
 import ChartUtilsCanvas from "../services/chartUtils.js";
 
 let Statistics = {
-    render: async (dataStatistics) => {
+    render: async (dataStatistics, customCategories) => {
         Statistics.data = dataStatistics;
+        Statistics.customCategories = customCategories;
+        Statistics.standartCategories = ["Food", "Transport", "Car", "Entertainment", "Clothes", "House", "Other"];
+
         return `
         <div class="site-content">
         ${Statistics.renderAside()}
@@ -34,7 +37,7 @@ let Statistics = {
     },
 
     afterRender: () => {
-        ChartUtilsCanvas.drawDonutCharts(Statistics.data);
+        ChartUtilsCanvas.drawDonutCharts(Statistics.data, Statistics.standartCategories, Statistics.customCategories);
     },
 
     renderTable: () => {
@@ -106,22 +109,18 @@ let Statistics = {
         return markup;
     },
     createCatData: () => {
-        let cIncome = {
-            "Food": [],
-            "Transport": [],
-            "Car": [],
-            "Entertainment": [],
-            "Clothes": [],
-            "House": []
-        };
-        let cExpense = {
-            "Food": [],
-            "Transport": [],
-            "Car": [],
-            "Entertainment": [],
-            "Clothes": [],
-            "House": []
-        };
+        let cIncome = {}, cExpense = {};
+
+        Statistics.standartCategories.forEach(category => {
+            cIncome[category] = [];
+            cExpense[category] = [];
+        })
+
+        Statistics.customCategories.forEach(category => {
+            cIncome[category.name] = [];
+            cExpense[category.name] = [];
+        })
+
         Statistics.data.forEach(element => {
             let date = new Date(element.date);
             if (date.getFullYear() == new Date().getFullYear()) { //Current year only

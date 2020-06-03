@@ -160,23 +160,19 @@ let ChartUtilsCanvas = {
         chart.render();
     },
 
-    getDonutChartsData: (rawData) => {
-        let sumIncome = {
-            "Food": 0,
-            "Transport": 0,
-            "Car": 0,
-            "Entertainment": 0,
-            "Clothes": 0,
-            "House": 0
-        };
-        let sumExpense = {
-            "Food": 0,
-            "Transport": 0,
-            "Car": 0,
-            "Entertainment": 0,
-            "Clothes": 0,
-            "House": 0
-        };
+    getDonutChartsData: (rawData, standartCategories, customCategories) => {
+
+        let sumIncome = {}, sumExpense = {};
+        standartCategories.forEach(category => {
+            sumIncome[category] = 0;
+            sumExpense[category] = 0;
+        });
+
+        customCategories.forEach(category => {
+            sumIncome[category.name] = 0;
+            sumExpense[category.name] = 0;
+        });
+
         for (let el of rawData) {
             let amount = CurrencyUtils.convertToUSD(Number(el.amount), el.currency);
             if (el.type == "Income") {
@@ -200,12 +196,12 @@ let ChartUtilsCanvas = {
         return {income: dataIncome, expense: dataExpense};
     },
 
-    drawDonutCharts: (rawData) => {
+    drawDonutCharts: (rawData, standartCategories, customCategories) => {
         if (rawData == null) {
             return;
         }
         
-        let dataAll = ChartUtilsCanvas.getDonutChartsData(rawData);
+        let dataAll = ChartUtilsCanvas.getDonutChartsData(rawData, standartCategories, customCategories);
         let chartIncome = new CanvasJS.Chart("income_graph", {
             animationEnabled: false,
             colorSet: "incomeColorSet",
