@@ -31,26 +31,25 @@ let Register = {
             if (email == '' | password == '' | username == '') {
                 alert('Fields cannot be left blank');
             } else {
-                const promiseAuth = auth.createUserWithEmailAndPassword(email, password);
-                promiseAuth.catch(e => {
+                const promiseAuth = auth.createUserWithEmailAndPassword(email, password).catch(e => {
                     alert(e.message);
                     isSuccessfull = false;
-                });
-            }
-
-            if (isSuccessfull) {
-                auth.onAuthStateChanged(firebaseUser => {
-                    if (firebaseUser) {
-                        alert(`User ${username} was successfully registered.`);
-                        window.location.hash = '/';
-                        db.ref('users/' + firebaseUser.uid).set({
-                            username: username,
-                            email: email
-                        }).catch(e => {
-                            alert(e.message);
-                        });
+                }).then(() => {
+                    if (isSuccessfull) {
+                        auth.onAuthStateChanged(firebaseUser => {
+                            if (firebaseUser) {
+                                alert(`User ${username} was successfully registered.`);
+                                window.location.hash = '/';
+                                db.ref('users/' + firebaseUser.uid).set({
+                                    username: username,
+                                    email: email
+                                }).catch(e => {
+                                    alert(e.message);
+                                });
+                            }
+                        })                
                     }
-                })                
+                })
             }
         });
     }
